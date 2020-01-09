@@ -1,0 +1,421 @@
+﻿<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title></title>
+  <link rel="stylesheet" href="images/style.css" />
+</head>
+
+<body class="stackedit"><div class="stackedit__html">
+
+<div class="article_content clearfix" id="article_content" style="overflow: hidden;">
+                                    <link href="https://csdnimg.cn/release/phoenix/template/css/ck_htmledit_views-3019150162.css" rel="stylesheet">
+                                        <link href="https://csdnimg.cn/release/phoenix/template/css/ck_htmledit_views-3019150162.css" rel="stylesheet">
+                <div class="htmledit_views" id="content_views">
+                                            <div class="table-box"><table align="center" style="border-collapse: collapse;" bgcolor="#ffffff" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td height="30" align="center"><span style="color: rgb(2, 54, 141); font-size: 14pt;"><strong>DELPHI中的记录类型【存储方式和变体记录】  </strong>
+</span>
+<br></td>
+</tr><tr><td height="9" align="center"><img width="502" height="9" alt="" src="http://www.cublog.cn/templates/default/images/right_line.gif" border="0"></td>
+</tr><tr><td align="center">
+<div class="table-box"><table style="border-collapse: collapse;" border="0" cellspacing="0" cellpadding="0"><tbody><tr><td width="740">
+<div id="art">
+<p><strong>一、DELPHI中记录的存储方式<br></strong>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+在DELPHI中，我们用record关键字来表明一个记录，有时候，我们还会看到用packed 
+record来声明的记录，这二者的区别就在于存储方式的不同。<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+在windows中，内存的分配一次是4个字节的，而Packed按字节进行内存的申请和分配，这样速度要慢一些，因为需要额外的时间来进行指针的定位。
+因此如果不用Packed的话，Delphi将按一次4个字节的方式申请内存，因此如果一个变量没有4个字节宽的话也要占4个字节！这样浪费了一些空间，
+但提高了效率。所谓鱼与熊掌不可兼得。<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+例如一个记录，以,sizeof(wudi)应该得到8。而如果使用packed关键字，那么sizeof(wudi)则得到5。</p>
+<div style="background: rgb(230, 230, 230); border: 0.5pt solid currentColor; border-image: none;">
+<div><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"><span style="color: rgb(0, 0, 0);">&nbsp;&nbsp;&nbsp;type&nbsp;wudi</span>
+<span style="color: rgb(0, 0, 0);">=</span>
+</span>
+<span style="color: rgb(0, 0, 0);"><span style="font-size: x-small;">&nbsp;record<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;age&nbsp;:&nbsp;integer;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;sex&nbsp;:&nbsp;shortint;&nbsp;&nbsp;&nbsp;&nbsp;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;end;</span>
+</span>
+</div>
+</div>
+<p><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+其中age是integer类型，正好4个字节，而sex是showint类型，占用一个字节，但基于4字节得内存分配方式，这里它也将占用4个字节。所</p>
+<p><strong>二、DELPHI中的变体记录</strong>
+<br>
+&nbsp;&nbsp; 
+在DELPHI中，观察Tmessage和TTypeData的定义的定义，从关键字record，你一眼就可以看出，它是一个记录类型，但仔细观察，你
+又会发现在它的定义中出现了case关键字。它代表什么呢？<br>
+&nbsp;&nbsp; 它代表此记录是变体记录。让我们先去了解一下变体记录。</p>
+<p>&nbsp;&nbsp;&nbsp; 2.1一个典型的变体记录定义如下：</p>
+<div style="background: rgb(230, 230, 230); border: 0.5pt solid currentColor; border-image: none;">
+<div><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"><span style="color: rgb(0, 0, 0);">type&nbsp;&nbsp;recordTypeName&nbsp;&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">=</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">&nbsp;&nbsp;record&nbsp;&nbsp;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;fieldList1:&nbsp;&nbsp;type1;&nbsp;&nbsp;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;...&nbsp;&nbsp;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;fieldListn:&nbsp;&nbsp;typen;&nbsp;&nbsp;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"></span>
+<span style="color: rgb(0, 0, 255);">case</span>
+</span>
+<span style="color: rgb(0, 0, 0);"><span style="font-size: x-small;">&nbsp;&nbsp;tag:&nbsp;&nbsp;ordinalType&nbsp;&nbsp;of&nbsp;&nbsp;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;constantList1:&nbsp;&nbsp;(variant1);&nbsp;&nbsp;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;...&nbsp;&nbsp;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;constantListn:&nbsp;&nbsp;(variantn);&nbsp;&nbsp;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+end;&nbsp;&nbsp;</span>
+</span>
+</div>
+</div>
+<p><br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 其中case到结尾部分定义了多个变体字段。所有变体字段共享一段内存大小又最大变体字段决定。</p>
+<p>&nbsp; 2.2使用变体记录时要注意：&nbsp; <br>
+（1）Long&nbsp; String、WideString、Dynamic&nbsp; 
+Array、Interface的大小都是指针大小，&nbsp; OleVariant其实就是COM&nbsp; 
+SDK中的VARIANT结构，大小是16字节。但在Object&nbsp; Pascal中它们都需要自动终结化，如果它们出现在variant&nbsp; 
+part中，编译器就无法知道它们是否应该进行终结化――因为不知道当前存储的是哪种类型。&nbsp;&nbsp;&nbsp; <br>
+（2）所有变体字段共享一段内存。而共享内存
+的大小则由最大变体字段决定。&nbsp; <br>
+（3）当tag存在时，它也是记录的一个字段。也可以没有tag。&nbsp; <br>
+（4）记录的变体部分的条件域必
+须是有序类型<br>
+（5）记录类型中可以含有变体部分，有点象case语句，但没有最后的end，变体部分必需在记录中其他字段的声明之后</p>
+<p>&nbsp; 2.3变体记录得作用<br>
+（1）节约空间。对于那些要根据条件而决定是否存储得类型，完全可以利用变体记录来达到节约空间得效果。例如，一
+个公司的员工薪水可以是月薪、年薪等方式，那么并没有必要在记录中都分配空间而又用不到。<br>
+（2）类型的转换。例如，如果有一个64位的整数类型作
+为变体的第一个字段，一个32位的整数Integer类型作为另一个变体的第一个字段，那么可以向64字段赋值然后以整数Integer字段读出其前32
+位<br>
+（3）妙用还有很多，根据它的原理挖掘吧</p>
+<p>&nbsp;&nbsp; 2.4一个演示变体记录使用的例子</p>
+<p>&nbsp;</p>
+<div style="background: rgb(230, 230, 230); border: 0.5pt solid currentColor; border-image: none;">
+<div><span style="font-size: x-small;"><img align="top" id="_0_66_Open_Image" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/ExpandedBlockStart.gif"><img align="top" id="_0_66_Closed_Image" style="display: none;" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/ContractedBlock.gif"><span id="_0_66_Closed_Text" style="border: 1px solid rgb(128, 128, 128); border-image: none; display: none;">...</span>
+</span>
+<span id="_0_66_Open_Text"><span style="color: rgb(0, 0, 0);"><span style="font-size: x-small;">{<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/InBlock.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;作者&nbsp;&nbsp;&nbsp;&nbsp;:wudi_1982<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/InBlock.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;联系方式:wudi_1982@hotmail.com<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/InBlock.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;转载请著名出处<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/ExpandedBlockEnd.gif">
+}</span>
+</span>
+</span>
+<span style="color: rgb(0, 0, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+unit&nbsp;Unit1;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"><br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"></span>
+</span>
+<span style="color: rgb(0, 0, 255);"><span style="font-size: x-small;">interface</span>
+</span>
+<span style="color: rgb(0, 0, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"><br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+uses<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;Windows,&nbsp;Messages,&nbsp;SysUtils,&nbsp;Variants,&nbsp;Classes,&nbsp;Graphics,&nbsp;Controls,&nbsp;Forms,<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;Dialogs,typinfo,&nbsp;StdCtrls,&nbsp;ComCtrls,&nbsp;ExtCtrls;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"><br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+type<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;WdFileType&nbsp;</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;(Files,&nbsp;Dirs);</span>
+<span style="color: rgb(0, 128, 0);">//</span>
+<span style="color: rgb(0, 128, 0);">类型信息</span>
+</span>
+<span style="color: rgb(0, 128, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"></span>
+</span>
+<span style="color: rgb(0, 0, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;TWdFileInfo&nbsp;</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;record</span>
+<span style="color: rgb(0, 128, 0);">//</span>
+<span style="color: rgb(0, 128, 0);">一个变体记录</span>
+</span>
+<span style="color: rgb(0, 128, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"></span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">&nbsp;&nbsp;&nbsp;&nbsp;Fname:&nbsp;</span>
+<span style="color: rgb(0, 0, 255);">string</span>
+<span style="color: rgb(0, 0, 0);">[</span>
+<span style="color: rgb(0, 0, 0);">10</span>
+<span style="color: rgb(0, 0, 0);">];</span>
+<span style="color: rgb(0, 128, 0);">//</span>
+<span style="color: rgb(0, 128, 0);">文件名</span>
+</span>
+<span style="color: rgb(0, 128, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"></span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span style="color: rgb(0, 0, 255);">case</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;typeid:WdFileType&nbsp;of</span>
+<span style="color: rgb(0, 128, 0);">//</span>
+<span style="color: rgb(0, 128, 0);">根据是文件夹还是文件来决定</span>
+</span>
+<span style="color: rgb(0, 128, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"></span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Files&nbsp;:&nbsp;(Fsize&nbsp;:&nbsp;integer);</span>
+<span style="color: rgb(0, 128, 0);">//</span>
+<span style="color: rgb(0, 128, 0);">文件大小</span>
+</span>
+<span style="color: rgb(0, 128, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"></span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dirs&nbsp;&nbsp;:&nbsp;(Dsize&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;:&nbsp;integer;</span>
+<span style="color: rgb(0, 128, 0);">//</span>
+<span style="color: rgb(0, 128, 0);">文件夹大小</span>
+</span>
+<span style="color: rgb(0, 128, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"></span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ContainFileCount&nbsp;:&nbsp;integer;</span>
+<span style="color: rgb(0, 128, 0);">//</span>
+<span style="color: rgb(0, 128, 0);">包含文件的个数</span>
+</span>
+<span style="color: rgb(0, 128, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"></span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ContainDirCount&nbsp;&nbsp;:&nbsp;integer);</span>
+<span style="color: rgb(0, 128, 0);">//</span>
+<span style="color: rgb(0, 128, 0);">包含文件夹的个数</span>
+</span>
+<span style="color: rgb(0, 128, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"></span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">&nbsp;&nbsp;end;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;TForm1&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;</span>
+<span style="color: rgb(0, 0, 255);">class</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">(TForm)<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;Memo1:&nbsp;TMemo;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;Panel1:&nbsp;TPanel;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;Button1:&nbsp;TButton;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;GroupBox1:&nbsp;TGroupBox;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;Label1:&nbsp;TLabel;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;procedure&nbsp;FormCreate(Sender:&nbsp;TObject);<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;procedure&nbsp;Button1Click(Sender:&nbsp;TObject);<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;</span>
+<span style="color: rgb(0, 0, 255);">private</span>
+</span>
+<span style="color: rgb(0, 0, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;pp&nbsp;:&nbsp;array[</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">0</span>
+<span style="color: rgb(0, 0, 0);">..</span>
+<span style="color: rgb(0, 0, 0);">1</span>
+<span style="color: rgb(0, 0, 0);">]&nbsp;of&nbsp;TWdFileInfo;</span>
+<span style="color: rgb(0, 128, 0);">//</span>
+<span style="color: rgb(0, 128, 0);">一个变体记录数组</span>
+</span>
+<span style="color: rgb(0, 128, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"></span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">&nbsp;&nbsp;&nbsp;&nbsp;procedure&nbsp;ShowInfo;&nbsp;&nbsp;</span>
+<span style="color: rgb(0, 128, 0);">//</span>
+<span style="color: rgb(0, 128, 0);">在memo中显示当前变体记录的信息</span>
+</span>
+<span style="color: rgb(0, 128, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"></span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">&nbsp;&nbsp;</span>
+<span style="color: rgb(0, 0, 255);">public</span>
+</span>
+<span style="color: rgb(0, 0, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;end;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"><br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+var<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;Form1:&nbsp;TForm1;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"><br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+implementation<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"><br><img align="top" id="_948_957_Open_Image" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/ExpandedBlockStart.gif"><img align="top" id="_948_957_Closed_Image" style="display: none;" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/ContractedBlock.gif"></span>
+</span>
+<span style="font-size: x-small;"><span id="_948_957_Closed_Text" style="border: 1px solid rgb(128, 128, 128); border-image: none; display: none;">...</span>
+<span id="_948_957_Open_Text"><span style="color: rgb(0, 0, 0);">{$R&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">*</span>
+<span style="color: rgb(0, 0, 0);">.dfm}</span>
+</span>
+</span>
+<span style="color: rgb(0, 0, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"><br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+procedure&nbsp;TForm1.FormCreate(Sender:&nbsp;TObject);<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+begin<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 128, 0);">//</span>
+<span style="color: rgb(0, 128, 0);">初始化是为记录赋值</span>
+</span>
+<span style="color: rgb(0, 128, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"></span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">&nbsp;&nbsp;&nbsp;with&nbsp;pp[</span>
+<span style="color: rgb(0, 0, 0);">0</span>
+<span style="color: rgb(0, 0, 0);">]&nbsp;</span>
+<span style="color: rgb(0, 0, 255);">do</span>
+</span>
+<span style="color: rgb(0, 0, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;begin<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fname&nbsp;:</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">'</span>
+<span style="color: rgb(0, 0, 0);">PP0</span>
+<span style="color: rgb(0, 0, 0);">'</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;typeid&nbsp;:</span>
+<span style="color: rgb(0, 0, 0);">=</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">&nbsp;Files;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span style="color: rgb(0, 128, 0);">//</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 128, 0);">fsize和dsize实际用的是同一块存储空间，<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</span>
+<span style="color: rgb(0, 128, 0);">//</span>
+<span style="color: rgb(0, 128, 0);">这里两个都赋值了，存储空间中记录的自然是后者</span>
+</span>
+<span style="color: rgb(0, 128, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"></span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fsize&nbsp;:</span>
+<span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">10</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dsize&nbsp;:</span>
+<span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">100</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ContainFileCount&nbsp;:</span>
+<span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">1</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ContainDirCount&nbsp;:</span>
+<span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">2</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;end;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;with&nbsp;pp[</span>
+<span style="color: rgb(0, 0, 0);">1</span>
+<span style="color: rgb(0, 0, 0);">]&nbsp;</span>
+<span style="color: rgb(0, 0, 255);">do</span>
+</span>
+<span style="color: rgb(0, 0, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;begin<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fname&nbsp;:</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">'</span>
+<span style="color: rgb(0, 0, 0);">PP1</span>
+<span style="color: rgb(0, 0, 0);">'</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;typeid&nbsp;:</span>
+<span style="color: rgb(0, 0, 0);">=</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">&nbsp;Dirs;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Fsize&nbsp;:</span>
+<span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">0</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Dsize&nbsp;:</span>
+<span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">100</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ContainFileCount&nbsp;:</span>
+<span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">11</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ContainDirCount&nbsp;:</span>
+<span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">222</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;end;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;Memo1.Clear;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;ShowInfo;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+end;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"><br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+procedure&nbsp;TForm1.ShowInfo;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+var<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;i&nbsp;:&nbsp;integer;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;fs&nbsp;:&nbsp;</span>
+<span style="color: rgb(0, 0, 255);">string</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+begin<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;Memo1.Lines.Add(</span>
+<span style="color: rgb(0, 0, 0);">'</span>
+<span style="color: rgb(0, 0, 0);">变体记录信息显示</span>
+<span style="color: rgb(0, 0, 0);">'</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">);<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;</span>
+<span style="color: rgb(0, 0, 255);">for</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;i&nbsp;:</span>
+<span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">0</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;to&nbsp;</span>
+<span style="color: rgb(0, 0, 0);">1</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;</span>
+<span style="color: rgb(0, 0, 255);">do</span>
+</span>
+<span style="color: rgb(0, 0, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;begin<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;fs&nbsp;:</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">=</span>
+<span style="color: rgb(0, 0, 0);">&nbsp;Format(</span>
+<span style="color: rgb(0, 0, 0);">'</span>
+<span style="color: rgb(0, 0, 0);">PP%d
+的大小是(%d)</span>
+<span style="color: rgb(0, 0, 0);">'</span>
+<span style="color: rgb(0, 0, 0);">+</span>
+<span style="color: rgb(0, 0, 0);">#</span>
+<span style="color: rgb(0, 0, 0);">13</span>
+<span style="color: rgb(0, 0, 0);">+</span>
+<span style="color: rgb(0, 0, 0);">'</span>
+<span style="color: rgb(0, 0, 0);">Fsize:(%d),Dsize:(%d)</span>
+<span style="color: rgb(0, 0, 0);">'</span>
+<span style="color: rgb(0, 0, 0);">+</span>
+<span style="color: rgb(0, 0, 0);">#</span>
+<span style="color: rgb(0, 0, 0);">13</span>
+<span style="color: rgb(0, 0, 0);">+</span>
+<span style="color: rgb(0, 0, 0);">'</span>
+<span style="color: rgb(0, 0, 0);">ContainFileCount:(%d),CDirCount:(%d);</span>
+<span style="color: rgb(0, 0, 0);">'</span>
+</span>
+<span style="color: rgb(0, 0, 0);"><br><span style="font-size: x-small;"><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;,[i,</span>
+</span>
+<span style="color: rgb(0, 0, 255);"><span style="font-size: x-small;">sizeof</span>
+</span>
+<span style="font-size: x-small;"><span style="color: rgb(0, 0, 0);">(pp[i]),pp[i].Fsize,pp[i].Dsize,pp[i].ContainFileCount,pp[i].ContainDirCount]);<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;Memo1.Lines.Add(fs);<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;Memo1.Lines.Add(</span>
+<span style="color: rgb(0, 0, 0);">'</span>
+<span style="color: rgb(0, 0, 0);">------------------------</span>
+<span style="color: rgb(0, 0, 0);">'</span>
+</span>
+<span style="color: rgb(0, 0, 0);"><span style="font-size: x-small;">);<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;&nbsp;end;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"><br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"><br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+end;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"><br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+procedure&nbsp;TForm1.Button1Click(Sender:&nbsp;TObject);<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+begin<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+&nbsp;&nbsp;Memo1.Clear;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+end;<br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif"><br><img align="top" alt="" src="http://images.csdn.net/syntaxhighlighting/OutliningIndicators/None.gif">
+end.</span>
+</span>
+</div>
+</div>
+</div>
+</td>
+</tr></tbody></table></div></td>
+</tr></tbody></table></div>                                    </div>
+                    </div>
+
+
+</div></body>
+
+</html>

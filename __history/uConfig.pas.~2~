@@ -1,0 +1,33 @@
+unit uConfig;
+
+interface
+uses
+  Vcl.Forms,System.SysUtils;
+const
+  WORK_DIR:string='mypage';
+  LOG_NAME:string='authLog.txt';
+  LOCAL_DIR:string='D:\works\delphi\xueyuan\pc';
+  FTP_HOST:string='';
+  FTP_PORT=21;
+  FTP_USER:string='';
+  FTP_PWD:string='';
+var
+  workdir:string;//工作目录
+  logfile:string;// 数据库子目录,数据库
+  isInit:boolean=false;
+  procedure init();
+implementation
+procedure init();
+var
+    me:String;
+begin
+  isInit:=true;
+  me:=application.ExeName;
+  workdir:=extractfiledir(me)+'\'+WORK_DIR;
+  if(not DirectoryExists(workdir))then ForceDirectories(workdir);
+  logfile:=workdir+'\'+LOG_NAME;
+
+end;
+begin
+  init();
+end.
