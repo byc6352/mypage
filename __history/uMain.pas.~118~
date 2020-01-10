@@ -84,6 +84,8 @@ type
     N3: TMenuItem;
     N4: TMenuItem;
     N5: TMenuItem;
+    tssite: TTabSheet;
+    website: TWebBrowser;
     procedure btnLoadClick(Sender: TObject);
     procedure Web1DocumentComplete(ASender: TObject; const pDisp: IDispatch;
       const URL: OleVariant);
@@ -133,6 +135,10 @@ type
     procedure PopDownFileClick(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
     procedure N3Click(Sender: TObject);
+    procedure websiteDocumentComplete(ASender: TObject;
+      const pDisp: IDispatch; const URL: OleVariant);
+    procedure websiteNavigateComplete2(ASender: TObject;
+      const pDisp: IDispatch; const URL: OleVariant);
   private
     { Private declarations }
     mLocalHomeDir:string;
@@ -147,6 +153,7 @@ type
     procedure doUploadDir(idftp:TIdFTP;LocalPath,FileExt:string);
     function ftpConnected():boolean;
     procedure doDelDir(idftp:TIdFTP;dir:string);
+    procedure uploadfile(ftp:TIdFTP;LocalFile:string);
   public
     { Public declarations }
   end;
@@ -158,13 +165,18 @@ var
 function getPageCode(doc:IHTMLDocument2):string;//返回页面源代码
 function getPageContent(doc:IHTMLDocument2;tag:string):string;//返回页面源代码
 function DownloadToFile(Source, Dest: string): Boolean;
-procedure SaveAsPage(doc:IHTMLDocument2;localPageName:string);//页面另存为
+function SaveAsPage(doc:IHTMLDocument2;localPageName:string):string;//页面另存为
 procedure SaveSinglePage(doc:IHTMLDocument2;localPageName:string);//仅仅保存一个页面
 procedure  WB_LoadHTML(WebBrowser:  TWebBrowser;  HTMLCode:  string);//将 HTML 代码直接加入到 TWebbrowser 组件中去
 procedure  WBLoadHTML(WebBrowser:  TWebBrowser;  HTMLCode:  tstrings);
 implementation
 
 {$R *.dfm}
+procedure TfMain.uploadfile(ftp:TIdFTP;LocalFile:string);
+begin
+  if ftp.Connected=false then exit;
+  ftp.Put(LocalFile);
+end;
 procedure TfMain.doDelDir(idftp:TIdFTP;dir:string);
 var
   t : TIdFTPListItem;
@@ -184,7 +196,7 @@ begin   //连接
     else if (t.ItemType = ditdirectory) then     //如果是文件夹，则往下循环下载文件夹的内容
     begin
       foldName :=t.FileName;
-      doDelDir(idftp,dir+'\'+foldName);    //递归调用，往下一层一层的循环下载子文件夹数据
+      doDelDir(idftp,foldName);    //递归调用，往下一层一层的循环下载子文件夹数据
       //idFTP.ChangeDirUp();                   //返回上级目录
       //idFTP.RemoveDir(foldName);
       idFTP.List(nil);
@@ -399,7 +411,8 @@ begin
   if not ftpConnected() then exit;
   item:=listftpfile.Selected;
   if item.ImageIndex<>7 then exit;
-  ftp1.RemoveDir(item.Caption);
+  //ftp1.RemoveDir(item.Caption);
+  doDelDir(ftp1,item.Caption);
   ftpListFile('');
 end;
 
@@ -409,11 +422,9 @@ var
   filename,dir,Localfile:string;
 begin
   if not ftpConnected() then exit;
-  item:=listftpfile.Selected;
-  if item.ImageIndex<>8 then exit;
   filename:=edtfile.Text;
   if(filename='*.*')then exit;
-  localfile:=dir+'\'+filename;
+  localfile:=dir1.Directory+'\'+filename;
 try
   ftp1.Put(LocalFile,filename,true);
   ftpListFile('');
@@ -620,9 +631,7 @@ end;
 
 procedure TfMain.btnParentDirClick(Sender: TObject);
 begin
-  //FTP1.ChangeDir('..');
-  FTP1.ChangeDirUp;
-  ftpListFile('');
+  N5Click(sender);
 end;
 
 procedure TfMain.btnSaveasClick(Sender: TObject);
@@ -631,7 +640,7 @@ const
 var
   filename,fileList,lastLine,lastnum,newnum,newfilename:string; //fileList:list文件名;lastline:最后的li项；lastnum:最大li编号；newnum:新文件编号；newfilename:新文件名；
   doc3:IHTMLDocument2;
-  ss:tstrings;
+  ss,imglist:tstrings;
   i:integer;
 begin
   fileList:=uFuncs.findfile(dir1.Directory,'*list.htm');
@@ -641,6 +650,7 @@ begin
     exit;
   end;
   ss:=tstringlist.Create;
+  imglist:=tstringlist.Create;
   ss.LoadFromFile(fileList,TEncoding.UTF8);
   for i := 0 to ss.Count-1 do
   begin
@@ -669,7 +679,7 @@ begin
     filename:=save1.FileName;
     save1.InitialDir:=extractfiledir(filename);
     doc3:=web3.Document as IHTMLDocument2;
-    SaveAsPage(doc3,filename);
+    imglist.Text:=SaveAsPage(doc3,filename);
     fmain.memo5.Lines.Text:=fmain.web3.OleObject.Document.all.tags('HTML').Item(0).outerHTML;
     memo5.Lines.SaveToFile(filename,tEncoding.UTF8);
     page1.ActivePageIndex:=10;
@@ -678,6 +688,24 @@ begin
     lastLine:='<li><a href="'+newfilename+'">'+mtitle+'</a></li>';
     ss.Insert(i,lastLine);
     ss.SaveToFile(fileList,tEncoding.UTF8);
+    //上传到站点
+    if(ftp1.Connected)then
+    begin
+      ftp1.Put(filename);
+      ftp1.Delete(extractfilename(fileList));
+      ftp1.Put(fileList);
+      if imglist.Count>0 then
+      begin
+        ftp1.ChangeDir('images');
+        for I := 0 to imglist.Count-1 do
+        begin
+          ftp1.Put(imglist[i]);
+        end;
+        ftp1.ChangeDirUp;
+      end;
+      ftpListfile('');
+      file1.Brush;
+    end;
   end;
   if assigned(ss) then ss.Free;
 
@@ -721,6 +749,7 @@ begin
   fmain.caption:=APP_TITLE+APP_VERSION;
   initLocalDir();
   initHostdir();
+  website.Navigate(uConfig.SITE_HOME);
 end;
 
 procedure TfMain.FTP1AfterClientLogin(Sender: TObject);
@@ -858,8 +887,30 @@ begin
   webList.Silent := True;
 end;
 
+procedure TfMain.websiteDocumentComplete(ASender: TObject;
+  const pDisp: IDispatch; const URL: OleVariant);
+var
+  doc:IHTMLDocument2;
+begin
+  doc:=webList.Document as IHTMLDocument2;
+  bar1.Panels[0].Text:='网站页面加载完毕！';
+
+end;
+
+procedure TfMain.websiteNavigateComplete2(ASender: TObject;
+  const pDisp: IDispatch; const URL: OleVariant);
+begin
+  webSite.Silent := True;
+end;
+
 //------------------------------------------页面另存为区------------------------------------------
-procedure SaveAsPage(doc:IHTMLDocument2;localPageName:string);//页面另存为
+{-------------------------------------------------------------------------------
+过程名:    SaveAsPage 将远程doc页面保存为本地页面，同时修改页面里面的图片链接地址，下载远程图片到本地，返回本地图片地址列表；
+参数:      doc:IHTMLDocument2;localPageName:string  1.远程页面；2.本地文件名；
+返回值:    result:string  返回本地图片列表地址。
+
+-------------------------------------------------------------------------------}
+function SaveAsPage(doc:IHTMLDocument2;localPageName:string):string;//页面另存为
 Var
   all:IHTMLElementCollection;
   sheets:IHTMLstyleSheetsCollection;
@@ -874,6 +925,7 @@ begin
   filetag:=leftstr(localfilename,length(localfilename)-4);
   localImageDir:=localPageDir+'\images';
   if(not System.SysUtils.directoryexists(localImageDir))then System.SysUtils.forcedirectories(localImageDir);
+  ss:=tstringlist.Create;
   all:=doc.images;
   len:=all.length;
   for I:=0 to len-1 do begin
@@ -890,9 +942,12 @@ begin
     filename:=filetag+num+fileext;
     localfilename:=localImageDir+'\'+filename;
     DownloadToFile(url,localfilename);
+    ss.Add(localfilename);
     newUrl:='images/'+filename;
     item.src:=newUrl;
   end;
+  result:=ss.Text;
+  ss.Free;
   //ss:=tstringlist.Create;
   //ss.Text:=doc.body.outerHTML;
   //ss.SaveToFile(localpagename,TEncoding.UTF8);

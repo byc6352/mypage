@@ -84,6 +84,8 @@ type
     N3: TMenuItem;
     N4: TMenuItem;
     N5: TMenuItem;
+    tssite: TTabSheet;
+    website: TWebBrowser;
     procedure btnLoadClick(Sender: TObject);
     procedure Web1DocumentComplete(ASender: TObject; const pDisp: IDispatch;
       const URL: OleVariant);
@@ -133,6 +135,10 @@ type
     procedure PopDownFileClick(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
     procedure N3Click(Sender: TObject);
+    procedure websiteDocumentComplete(ASender: TObject;
+      const pDisp: IDispatch; const URL: OleVariant);
+    procedure websiteNavigateComplete2(ASender: TObject;
+      const pDisp: IDispatch; const URL: OleVariant);
   private
     { Private declarations }
     mLocalHomeDir:string;
@@ -147,6 +153,7 @@ type
     procedure doUploadDir(idftp:TIdFTP;LocalPath,FileExt:string);
     function ftpConnected():boolean;
     procedure doDelDir(idftp:TIdFTP;dir:string);
+    procedure uploadfile(ftp:TIdFTP;LocalFile:string);
   public
     { Public declarations }
   end;
@@ -165,6 +172,11 @@ procedure  WBLoadHTML(WebBrowser:  TWebBrowser;  HTMLCode:  tstrings);
 implementation
 
 {$R *.dfm}
+procedure TfMain.uploadfile(ftp:TIdFTP;LocalFile:string);
+begin
+  if ftp.Connected=false then exit;
+  ftp.Put(LocalFile);
+end;
 procedure TfMain.doDelDir(idftp:TIdFTP;dir:string);
 var
   t : TIdFTPListItem;
@@ -184,7 +196,7 @@ begin   //连接
     else if (t.ItemType = ditdirectory) then     //如果是文件夹，则往下循环下载文件夹的内容
     begin
       foldName :=t.FileName;
-      doDelDir(idftp,dir+'\'+foldName);    //递归调用，往下一层一层的循环下载子文件夹数据
+      doDelDir(idftp,foldName);    //递归调用，往下一层一层的循环下载子文件夹数据
       //idFTP.ChangeDirUp();                   //返回上级目录
       //idFTP.RemoveDir(foldName);
       idFTP.List(nil);
@@ -410,11 +422,9 @@ var
   filename,dir,Localfile:string;
 begin
   if not ftpConnected() then exit;
-  item:=listftpfile.Selected;
-  if item.ImageIndex<>8 then exit;
   filename:=edtfile.Text;
   if(filename='*.*')then exit;
-  localfile:=dir+'\'+filename;
+  localfile:=dir1.Directory+'\'+filename;
 try
   ftp1.Put(LocalFile,filename,true);
   ftpListFile('');
@@ -621,9 +631,7 @@ end;
 
 procedure TfMain.btnParentDirClick(Sender: TObject);
 begin
-  //FTP1.ChangeDir('..');
-  FTP1.ChangeDirUp;
-  ftpListFile('');
+  N5Click(sender);
 end;
 
 procedure TfMain.btnSaveasClick(Sender: TObject);
@@ -679,6 +687,13 @@ begin
     lastLine:='<li><a href="'+newfilename+'">'+mtitle+'</a></li>';
     ss.Insert(i,lastLine);
     ss.SaveToFile(fileList,tEncoding.UTF8);
+    if(ftp1.Connected)then
+    begin
+      ftp1.Put(filename);
+      ftp1.Delete(extractfilename(fileList));
+      ftp1.Put(fileList);
+      ftpListfile('');
+    end;
   end;
   if assigned(ss) then ss.Free;
 
@@ -722,6 +737,7 @@ begin
   fmain.caption:=APP_TITLE+APP_VERSION;
   initLocalDir();
   initHostdir();
+  website.Navigate(uConfig.SITE_HOME);
 end;
 
 procedure TfMain.FTP1AfterClientLogin(Sender: TObject);
@@ -857,6 +873,22 @@ procedure TfMain.WebListNavigateComplete2(ASender: TObject;
   const pDisp: IDispatch; const URL: OleVariant);
 begin
   webList.Silent := True;
+end;
+
+procedure TfMain.websiteDocumentComplete(ASender: TObject;
+  const pDisp: IDispatch; const URL: OleVariant);
+var
+  doc:IHTMLDocument2;
+begin
+  doc:=webList.Document as IHTMLDocument2;
+  bar1.Panels[0].Text:='网站页面加载完毕！';
+
+end;
+
+procedure TfMain.websiteNavigateComplete2(ASender: TObject;
+  const pDisp: IDispatch; const URL: OleVariant);
+begin
+  webSite.Silent := True;
 end;
 
 //------------------------------------------页面另存为区------------------------------------------

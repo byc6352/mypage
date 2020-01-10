@@ -84,6 +84,8 @@ type
     N3: TMenuItem;
     N4: TMenuItem;
     N5: TMenuItem;
+    tssite: TTabSheet;
+    website: TWebBrowser;
     procedure btnLoadClick(Sender: TObject);
     procedure Web1DocumentComplete(ASender: TObject; const pDisp: IDispatch;
       const URL: OleVariant);
@@ -133,6 +135,10 @@ type
     procedure PopDownFileClick(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
     procedure N3Click(Sender: TObject);
+    procedure websiteDocumentComplete(ASender: TObject;
+      const pDisp: IDispatch; const URL: OleVariant);
+    procedure websiteNavigateComplete2(ASender: TObject;
+      const pDisp: IDispatch; const URL: OleVariant);
   private
     { Private declarations }
     mLocalHomeDir:string;
@@ -146,6 +152,8 @@ type
     procedure doDownloadDir(idftp:TIdFTP;dir,LocalPath:string);
     procedure doUploadDir(idftp:TIdFTP;LocalPath,FileExt:string);
     function ftpConnected():boolean;
+    procedure doDelDir(idftp:TIdFTP;dir:string);
+    procedure uploadfile(ftp:TIdFTP;LocalFile:string);
   public
     { Public declarations }
   end;
@@ -157,13 +165,47 @@ var
 function getPageCode(doc:IHTMLDocument2):string;//返回页面源代码
 function getPageContent(doc:IHTMLDocument2;tag:string):string;//返回页面源代码
 function DownloadToFile(Source, Dest: string): Boolean;
-procedure SaveAsPage(doc:IHTMLDocument2;localPageName:string);//页面另存为
+function SaveAsPage(doc:IHTMLDocument2;localPageName:string):string;//页面另存为
 procedure SaveSinglePage(doc:IHTMLDocument2;localPageName:string);//仅仅保存一个页面
 procedure  WB_LoadHTML(WebBrowser:  TWebBrowser;  HTMLCode:  string);//将 HTML 代码直接加入到 TWebbrowser 组件中去
 procedure  WBLoadHTML(WebBrowser:  TWebBrowser;  HTMLCode:  tstrings);
 implementation
 
 {$R *.dfm}
+procedure TfMain.uploadfile(ftp:TIdFTP;LocalFile:string);
+begin
+  if ftp.Connected=false then exit;
+  ftp.Put(LocalFile);
+end;
+procedure TfMain.doDelDir(idftp:TIdFTP;dir:string);
+var
+  t : TIdFTPListItem;
+  i : integer;
+  fileName,foldName : String;
+begin   //连接
+  idftp.changedir(dir);                          //改变目录
+  idftp.List(nil);                               //获取当前目录的信息
+  for i:=0 to idftp.DirectoryListing.Count-1 do
+  begin
+    t := idftp.DirectoryListing.Items[i];        //得到一个文件相关信息
+    fileName := t.FileName;                      //获取文件名
+    if t.ItemType = ditFile then                 //如果是文件，则直接下载
+    begin
+      idftp.Delete(filename);
+    end
+    else if (t.ItemType = ditdirectory) then     //如果是文件夹，则往下循环下载文件夹的内容
+    begin
+      foldName :=t.FileName;
+      doDelDir(idftp,foldName);    //递归调用，往下一层一层的循环下载子文件夹数据
+      //idFTP.ChangeDirUp();                   //返回上级目录
+      //idFTP.RemoveDir(foldName);
+      idFTP.List(nil);
+    end;
+  end;
+  idFTP.ChangeDirUp();
+  idFTP.RemoveDir(dir);
+end;
+
 
 function TfMain.ftpConnected():boolean;
 begin
@@ -369,7 +411,8 @@ begin
   if not ftpConnected() then exit;
   item:=listftpfile.Selected;
   if item.ImageIndex<>7 then exit;
-  ftp1.RemoveDir(item.Caption);
+  //ftp1.RemoveDir(item.Caption);
+  doDelDir(ftp1,item.Caption);
   ftpListFile('');
 end;
 
@@ -379,11 +422,9 @@ var
   filename,dir,Localfile:string;
 begin
   if not ftpConnected() then exit;
-  item:=listftpfile.Selected;
-  if item.ImageIndex<>8 then exit;
   filename:=edtfile.Text;
   if(filename='*.*')then exit;
-  localfile:=dir+'\'+filename;
+  localfile:=dir1.Directory+'\'+filename;
 try
   ftp1.Put(LocalFile,filename,true);
   ftpListFile('');
@@ -590,9 +631,7 @@ end;
 
 procedure TfMain.btnParentDirClick(Sender: TObject);
 begin
-  //FTP1.ChangeDir('..');
-  FTP1.ChangeDirUp;
-  ftpListFile('');
+  N5Click(sender);
 end;
 
 procedure TfMain.btnSaveasClick(Sender: TObject);
@@ -648,6 +687,14 @@ begin
     lastLine:='<li><a href="'+newfilename+'">'+mtitle+'</a></li>';
     ss.Insert(i,lastLine);
     ss.SaveToFile(fileList,tEncoding.UTF8);
+    if(ftp1.Connected)then
+    begin
+      ftp1.Put(filename);
+      ftp1.Delete(extractfilename(fileList));
+      ftp1.Put(fileList);
+      ftpListfile('');
+      file1.Brush;
+    end;
   end;
   if assigned(ss) then ss.Free;
 
@@ -691,6 +738,7 @@ begin
   fmain.caption:=APP_TITLE+APP_VERSION;
   initLocalDir();
   initHostdir();
+  website.Navigate(uConfig.SITE_HOME);
 end;
 
 procedure TfMain.FTP1AfterClientLogin(Sender: TObject);
@@ -828,8 +876,30 @@ begin
   webList.Silent := True;
 end;
 
+procedure TfMain.websiteDocumentComplete(ASender: TObject;
+  const pDisp: IDispatch; const URL: OleVariant);
+var
+  doc:IHTMLDocument2;
+begin
+  doc:=webList.Document as IHTMLDocument2;
+  bar1.Panels[0].Text:='网站页面加载完毕！';
+
+end;
+
+procedure TfMain.websiteNavigateComplete2(ASender: TObject;
+  const pDisp: IDispatch; const URL: OleVariant);
+begin
+  webSite.Silent := True;
+end;
+
 //------------------------------------------页面另存为区------------------------------------------
-procedure SaveAsPage(doc:IHTMLDocument2;localPageName:string);//页面另存为
+{-------------------------------------------------------------------------------
+过程名:    SaveAsPage 将远程doc页面保存为本地页面，同时修改页面里面的图片链接地址，下载远程图片到本地，返回本地图片地址列表；
+参数:      doc:IHTMLDocument2;localPageName:string  1.远程页面；2.本地文件名；
+返回值:    result:string  返回本地图片列表地址。
+
+-------------------------------------------------------------------------------}
+function SaveAsPage(doc:IHTMLDocument2;localPageName:string):string;//页面另存为
 Var
   all:IHTMLElementCollection;
   sheets:IHTMLstyleSheetsCollection;
@@ -844,6 +914,7 @@ begin
   filetag:=leftstr(localfilename,length(localfilename)-4);
   localImageDir:=localPageDir+'\images';
   if(not System.SysUtils.directoryexists(localImageDir))then System.SysUtils.forcedirectories(localImageDir);
+  ss:=tstringlist.Create;
   all:=doc.images;
   len:=all.length;
   for I:=0 to len-1 do begin
@@ -860,9 +931,12 @@ begin
     filename:=filetag+num+fileext;
     localfilename:=localImageDir+'\'+filename;
     DownloadToFile(url,localfilename);
+    ss.Add(localfilename);
     newUrl:='images/'+filename;
     item.src:=newUrl;
   end;
+  result:=ss.Text;
+  ss.Free;
   //ss:=tstringlist.Create;
   //ss.Text:=doc.body.outerHTML;
   //ss.SaveToFile(localpagename,TEncoding.UTF8);
