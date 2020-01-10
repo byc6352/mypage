@@ -20,25 +20,31 @@ object fMain: TfMain
     Top = 41
     Width = 831
     Height = 741
-    ActivePage = tsWebsite
+    ActivePage = tsNew
     Align = alRight
     TabOrder = 0
-    object tsList: TTabSheet
-      Caption = #25991#31456#21015#34920
+    object tsLocal: TTabSheet
+      Caption = #26412#22320#39029#38754
       ImageIndex = 9
-      object WebList: TWebBrowser
+      object Splitter1: TSplitter
+        Left = 0
+        Top = 379
+        Width = 823
+        Height = 3
+        Cursor = crVSplit
+        Align = alBottom
+        ExplicitLeft = -5
+      end
+      object WebLocal: TWebBrowser
         Left = 0
         Top = 0
         Width = 823
-        Height = 713
+        Height = 379
         Align = alClient
         TabOrder = 0
-        OnNavigateComplete2 = WebListNavigateComplete2
-        OnDocumentComplete = WebListDocumentComplete
-        ExplicitLeft = 392
-        ExplicitTop = 344
-        ExplicitWidth = 300
-        ExplicitHeight = 150
+        OnNavigateComplete2 = WebLocalNavigateComplete2
+        OnDocumentComplete = WebLocalDocumentComplete
+        ExplicitHeight = 313
         ControlData = {
           4C0000000F550000B14900000000000000000000000000000000000000000000
           000000004C000000000000000000000001000000E0D057007335CF11AE690800
@@ -46,93 +52,183 @@ object fMain: TfMain
           8000000000000000000000000000000000000000000000000000000000000000
           00000000000000000100000000000000000000000000000000000000}
       end
-    end
-    object tsListCode: TTabSheet
-      Caption = #21015#34920#20195#30721
-      ImageIndex = 10
-      object memoList: TMemo
+      object Panel6: TPanel
         Left = 0
-        Top = 0
+        Top = 679
         Width = 823
-        Height = 713
-        Align = alClient
+        Height = 34
+        Align = alBottom
+        TabOrder = 1
+        ExplicitTop = 316
+        object edtLocalFile: TEdit
+          Left = 167
+          Top = 6
+          Width = 441
+          Height = 21
+          TabOrder = 0
+        end
+        object btnLocalBrush: TButton
+          Left = 0
+          Top = 4
+          Width = 75
+          Height = 25
+          Caption = #21047#26032
+          TabOrder = 1
+          OnClick = btnLocalBrushClick
+        end
+        object btnLocalSave: TButton
+          Left = 79
+          Top = 4
+          Width = 75
+          Height = 25
+          Caption = #20445#23384
+          TabOrder = 2
+          OnClick = btnLocalSaveClick
+        end
+      end
+      object memoLocal: TMemo
+        Left = 0
+        Top = 382
+        Width = 823
+        Height = 297
+        Align = alBottom
         ScrollBars = ssBoth
-        TabOrder = 0
+        TabOrder = 2
+        ExplicitLeft = -15
+        ExplicitTop = 416
         ExplicitWidth = 838
       end
     end
-    object ts0: TTabSheet
+    object tsRemote: TTabSheet
       Caption = #36828#31243#39029#38754
       ExplicitWidth = 838
-      object Web1: TWebBrowser
+      object Splitter2: TSplitter
+        Left = 0
+        Top = 448
+        Width = 823
+        Height = 8
+        Cursor = crVSplit
+        Align = alBottom
+      end
+      object WebRemote: TWebBrowser
         Left = 0
         Top = 0
         Width = 823
-        Height = 713
+        Height = 448
         Align = alClient
         TabOrder = 0
-        OnBeforeNavigate2 = Web1BeforeNavigate2
-        OnNavigateComplete2 = Web1NavigateComplete2
-        OnDocumentComplete = Web1DocumentComplete
-        ExplicitLeft = -4
-        ExplicitTop = -2
+        OnBeforeNavigate2 = WebRemoteBeforeNavigate2
+        OnNavigateComplete2 = WebRemoteNavigateComplete2
+        OnDocumentComplete = WebRemoteDocumentComplete
+        ExplicitHeight = 337
         ControlData = {
-          4C0000000F550000B14900000000000000000000000000000000000000000000
+          4C0000000F5500004D2E00000000000000000000000000000000000000000000
           000000004C000000000000000000000001000000E0D057007335CF11AE690800
           2B2E126208000000000000004C0000000114020000000000C000000000000046
           8000000000000000000000000000000000000000000000000000000000000000
           00000000000000000100000000000000000000000000000000000000}
+      end
+      object Panel7: TPanel
+        Left = 0
+        Top = 679
+        Width = 823
+        Height = 34
+        Align = alBottom
+        TabOrder = 1
+        ExplicitTop = 316
+        object edtRemote: TEdit
+          Left = 167
+          Top = 6
+          Width = 441
+          Height = 21
+          TabOrder = 0
+        end
+        object btnRemoteBrush: TButton
+          Left = 0
+          Top = 4
+          Width = 75
+          Height = 25
+          Caption = #21047#26032
+          TabOrder = 1
+          OnClick = btnRemoteBrushClick
+        end
+        object btnRemoteSave: TButton
+          Left = 79
+          Top = 4
+          Width = 75
+          Height = 25
+          Caption = #20445#23384
+          TabOrder = 2
+        end
+      end
+      object MemoRemote: TMemo
+        Left = 0
+        Top = 456
+        Width = 823
+        Height = 223
+        Align = alBottom
+        ScrollBars = ssBoth
+        TabOrder = 2
       end
     end
     object ts1: TTabSheet
       Caption = #27169#26495#39029#38754
       ImageIndex = 1
       ExplicitWidth = 838
-      object Web2: TWebBrowser
+      object WebModel: TWebBrowser
         Left = 0
         Top = 0
         Width = 823
-        Height = 713
-        Align = alClient
+        Height = 417
+        Align = alTop
         TabOrder = 0
-        OnDocumentComplete = Web2DocumentComplete
-        ExplicitLeft = -3
-        ExplicitTop = -2
+        OnDocumentComplete = WebModelDocumentComplete
         ControlData = {
-          4C0000000F550000B14900000000000000000000000000000000000000000000
+          4C0000000F550000192B00000000000000000000000000000000000000000000
           000000004C000000000000000000000001000000E0D057007335CF11AE690800
           2B2E126208000000000000004C0000000114020000000000C000000000000046
           8000000000000000000000000000000000000000000000000000000000000000
           00000000000000000100000000000000000000000000000000000000}
       end
-    end
-    object ts2: TTabSheet
-      Caption = #36828#31243#20195#30721
-      ImageIndex = 2
-      ExplicitWidth = 838
-      object Memo1: TMemo
+      object Panel8: TPanel
         Left = 0
-        Top = 0
+        Top = 679
         Width = 823
-        Height = 713
-        Align = alClient
-        Lines.Strings = (
-          'Memo1')
-        ScrollBars = ssBoth
-        TabOrder = 0
-        ExplicitWidth = 838
+        Height = 34
+        Align = alBottom
+        TabOrder = 1
+        ExplicitTop = 316
+        object edtModel: TEdit
+          Left = 167
+          Top = 6
+          Width = 441
+          Height = 21
+          TabOrder = 0
+        end
+        object btnModelBrush: TButton
+          Left = 0
+          Top = 4
+          Width = 75
+          Height = 25
+          Caption = #21047#26032
+          TabOrder = 1
+          OnClick = btnLocalBrushClick
+        end
+        object Button2: TButton
+          Left = 79
+          Top = 4
+          Width = 75
+          Height = 25
+          Caption = #20445#23384
+          TabOrder = 2
+        end
       end
-    end
-    object ts3: TTabSheet
-      Caption = #27169#26495#20195#30721
-      ImageIndex = 3
-      ExplicitWidth = 838
-      object Memo2: TMemo
+      object memoModel: TMemo
         Left = 0
-        Top = 0
+        Top = 417
         Width = 823
-        Height = 713
-        Align = alClient
+        Height = 262
+        Align = alBottom
         Lines.Strings = (
           '<!DOCTYPE html>'
           '<html>'
@@ -153,15 +249,17 @@ object fMain: TfMain
           ''
           '</html>')
         ScrollBars = ssBoth
-        TabOrder = 0
+        TabOrder = 2
+        ExplicitTop = 0
         ExplicitWidth = 838
+        ExplicitHeight = 713
       end
     end
-    object ts4: TTabSheet
+    object tsArticle: TTabSheet
       Caption = #25991#31456#20869#23481
       ImageIndex = 4
       ExplicitWidth = 838
-      object Memo3: TMemo
+      object memoArticle: TMemo
         Left = 0
         Top = 41
         Width = 823
@@ -193,89 +291,121 @@ object fMain: TfMain
         end
       end
     end
-    object ts5: TTabSheet
-      Caption = #21512#25104#20869#23481
-      ImageIndex = 5
-      ExplicitWidth = 838
-      object Memo4: TMemo
-        Left = 0
-        Top = 0
-        Width = 823
-        Height = 713
-        Align = alClient
-        ScrollBars = ssBoth
-        TabOrder = 0
-        ExplicitWidth = 838
-      end
-    end
-    object ts6: TTabSheet
+    object tsMerge: TTabSheet
       Caption = #21512#25104#39029#38754
       ImageIndex = 6
       ExplicitWidth = 838
-      object Web3: TWebBrowser
+      object Splitter3: TSplitter
+        Left = 0
+        Top = 424
+        Width = 823
+        Height = 8
+        Cursor = crVSplit
+        Align = alBottom
+      end
+      object WebMerge: TWebBrowser
         Left = 0
         Top = 0
         Width = 823
-        Height = 713
+        Height = 424
         Align = alClient
         TabOrder = 0
-        OnNavigateComplete2 = Web1NavigateComplete2
-        OnDocumentComplete = Web3DocumentComplete
-        ExplicitLeft = 392
-        ExplicitTop = 344
-        ExplicitWidth = 300
-        ExplicitHeight = 150
+        OnNavigateComplete2 = WebRemoteNavigateComplete2
+        OnDocumentComplete = WebMergeDocumentComplete
+        ExplicitHeight = 337
         ControlData = {
-          4C0000000F550000B14900000000000000000000000000000000000000000000
+          4C0000000F550000D22B00000000000000000000000000000000000000000000
           000000004C000000000000000000000001000000E0D057007335CF11AE690800
           2B2E126208000000000000004C0000000114020000000000C000000000000046
           8000000000000000000000000000000000000000000000000000000000000000
           00000000000000000100000000000000000000000000000000000000}
       end
-    end
-    object tsLocalContent: TTabSheet
-      Caption = #26412#22320#20869#23481
-      ImageIndex = 7
-      ExplicitWidth = 838
-      object Memo5: TMemo
+      object MemoMerge: TMemo
         Left = 0
-        Top = 0
+        Top = 432
         Width = 823
-        Height = 713
-        Align = alClient
-        Lines.Strings = (
-          'Memo1')
+        Height = 281
+        Align = alBottom
         ScrollBars = ssBoth
-        TabOrder = 0
-        ExplicitWidth = 838
+        TabOrder = 1
       end
     end
-    object ts8: TTabSheet
-      Caption = #26412#22320#39029#38754
+    object tsNew: TTabSheet
+      Caption = #26032#30340#39029#38754
       ImageIndex = 8
       ExplicitWidth = 838
-      object web4: TWebBrowser
+      object Splitter4: TSplitter
+        Left = 0
+        Top = 422
+        Width = 823
+        Height = 8
+        Cursor = crVSplit
+        Align = alBottom
+        ExplicitTop = 377
+      end
+      object webNew: TWebBrowser
         Left = 0
         Top = 0
         Width = 823
-        Height = 713
+        Height = 422
         Align = alClient
         TabOrder = 0
-        OnNavigateComplete2 = Web1NavigateComplete2
-        OnDocumentComplete = web4DocumentComplete
-        ExplicitLeft = 392
-        ExplicitTop = 344
-        ExplicitWidth = 300
-        ExplicitHeight = 150
+        OnNavigateComplete2 = WebRemoteNavigateComplete2
+        OnDocumentComplete = webNewDocumentComplete
+        ExplicitHeight = 377
         ControlData = {
-          4C0000000F550000B14900000000000000000000000000000000000000000000
+          4C0000000F5500009D2B00000000000000000000000000000000000000000000
           000000004C000000000000000000000001000000E0D057007335CF11AE690800
           2B2E126208000000000000004C0000000114020000000000C000000000000046
           8000000000000000000000000000000000000000000000000000000000000000
           00000000000000000100000000000000000000000000000000000000}
       end
+      object Panel9: TPanel
+        Left = 0
+        Top = 679
+        Width = 823
+        Height = 34
+        Align = alBottom
+        TabOrder = 1
+        ExplicitTop = 316
+        object edtnew: TEdit
+          Left = 167
+          Top = 6
+          Width = 441
+          Height = 21
+          TabOrder = 0
+        end
+        object btnNew: TButton
+          Left = 0
+          Top = 4
+          Width = 75
+          Height = 25
+          Caption = #21047#26032
+          TabOrder = 1
+          OnClick = btnLocalBrushClick
+        end
+        object Button3: TButton
+          Left = 79
+          Top = 4
+          Width = 75
+          Height = 25
+          Caption = #20445#23384
+          TabOrder = 2
+          OnClick = Button3Click
+        end
+      end
+      object memoNew: TMemo
+        Left = 0
+        Top = 430
+        Width = 823
+        Height = 249
+        Align = alBottom
+        ScrollBars = ssBoth
+        TabOrder = 2
+        ExplicitTop = 464
+      end
     end
-    object tsWebsite: TTabSheet
+    object tsFtpsite: TTabSheet
       Caption = #32593#31449#21518#21488
       ImageIndex = 11
       object Panel4: TPanel
@@ -421,14 +551,14 @@ object fMain: TfMain
           TabOrder = 1
           OnClick = btnParentDirClick
         end
-        object btnUpDir: TButton
+        object btnCancel: TButton
           Left = 575
           Top = 2
           Width = 75
           Height = 25
-          Caption = #19978#20256#30446#24405
+          Caption = #25764#28040
           TabOrder = 2
-          OnClick = btnParentDirClick
+          OnClick = btnCancelClick
         end
         object btnUpfile: TButton
           Left = 655
@@ -439,6 +569,30 @@ object fMain: TfMain
           TabOrder = 3
           OnClick = btnParentDirClick
         end
+      end
+    end
+    object tssite: TTabSheet
+      Caption = #32593#31449#21069#21488
+      ImageIndex = 12
+      object website: TWebBrowser
+        Left = 0
+        Top = 0
+        Width = 823
+        Height = 713
+        Align = alClient
+        TabOrder = 0
+        OnNavigateComplete2 = websiteNavigateComplete2
+        OnDocumentComplete = websiteDocumentComplete
+        ExplicitLeft = 392
+        ExplicitTop = 344
+        ExplicitWidth = 300
+        ExplicitHeight = 150
+        ControlData = {
+          4C0000000F550000B14900000000000000000000000000000000000000000000
+          000000004C000000000000000000000001000000E0D057007335CF11AE690800
+          2B2E126208000000000000004C0000000114020000000000C000000000000046
+          8000000000000000000000000000000000000000000000000000000000000000
+          00000000000000000100000000000000000000000000000000000000}
       end
     end
   end
@@ -511,7 +665,6 @@ object fMain: TfMain
       Height = 25
       Caption = #20445#23384#26412#22320#39029#38754
       TabOrder = 6
-      OnClick = btnSaveClick
     end
     object btnClose: TButton
       Left = 781
@@ -621,6 +774,7 @@ object fMain: TfMain
     end
     object N3: TMenuItem
       Caption = #19979#36733#30446#24405
+      OnClick = N3Click
     end
     object N4: TMenuItem
       Caption = #21024#38500#30446#24405

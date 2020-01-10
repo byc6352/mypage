@@ -78,6 +78,10 @@
         <DCC_ExeOutput>D:\works\app\</DCC_ExeOutput>
         <VerInfo_IncludeVerInfo>true</VerInfo_IncludeVerInfo>
         <VerInfo_Locale>1033</VerInfo_Locale>
+        <AppExecutionLevel>requireAdministrator</AppExecutionLevel>
+        <Icon_MainIcon>myPage_Icon.ico</Icon_MainIcon>
+        <UWP_DelphiLogo44>..\..\resource\png\Tag reader.png</UWP_DelphiLogo44>
+        <UWP_DelphiLogo150>..\..\resource\png\Tag reader.png</UWP_DelphiLogo150>
     </PropertyGroup>
     <PropertyGroup Condition="'$(Cfg_2)'!=''">
         <DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
@@ -129,6 +133,13 @@
                 <DeployFile LocalName="..\..\app\myPage.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
                         <RemoteName>myPage.exe</RemoteName>
+                        <Overwrite>true</Overwrite>
+                    </Platform>
+                </DeployFile>
+                <DeployFile LocalName="..\..\resource\png\Tag reader.png" Configuration="Debug" Class="UWP_DelphiLogo44">
+                    <Platform Name="Win32">
+                        <RemoteDir>Assets\</RemoteDir>
+                        <RemoteName>Logo44x44.png</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

@@ -17,45 +17,35 @@ type
     Panel1: TPanel;
     btnLoad: TButton;
     Bar1: TStatusBar;
-    ts0: TTabSheet;
+    tsRemote: TTabSheet;
     ts1: TTabSheet;
-    ts2: TTabSheet;
-    ts3: TTabSheet;
-    Web1: TWebBrowser;
-    Web2: TWebBrowser;
-    Memo1: TMemo;
-    Memo2: TMemo;
+    WebRemote: TWebBrowser;
+    WebModel: TWebBrowser;
     edtUrl: TEdit;
-    ts4: TTabSheet;
-    Memo3: TMemo;
+    tsArticle: TTabSheet;
+    memoArticle: TMemo;
     btnCopyContent: TButton;
     btnMerge: TButton;
-    ts5: TTabSheet;
-    Memo4: TMemo;
     btnMerge2: TButton;
-    ts6: TTabSheet;
-    Web3: TWebBrowser;
+    tsMerge: TTabSheet;
+    WebMerge: TWebBrowser;
     btnSaveas: TButton;
     Save1: TSaveDialog;
-    tsLocalContent: TTabSheet;
-    Memo5: TMemo;
-    web4: TWebBrowser;
+    webNew: TWebBrowser;
     btnSave: TButton;
-    ts8: TTabSheet;
+    tsNew: TTabSheet;
     Panel2: TPanel;
     Drive1: TDriveComboBox;
     Dir1: TDirectoryListBox;
     Panel3: TPanel;
     File1: TFileListBox;
-    tsList: TTabSheet;
-    tsListCode: TTabSheet;
-    WebList: TWebBrowser;
-    memoList: TMemo;
+    tsLocal: TTabSheet;
+    WebLocal: TWebBrowser;
     edtFile: TEdit;
     btnClose: TButton;
     GroupBox1: TGroupBox;
     edtTitle: TEdit;
-    tsWebsite: TTabSheet;
+    tsFtpsite: TTabSheet;
     Panel4: TPanel;
     edtAddr: TEdit;
     edtPort: TEdit;
@@ -84,32 +74,58 @@ type
     N3: TMenuItem;
     N4: TMenuItem;
     N5: TMenuItem;
+    tssite: TTabSheet;
+    website: TWebBrowser;
+    Splitter1: TSplitter;
+    Panel6: TPanel;
+    memoLocal: TMemo;
+    edtLocalFile: TEdit;
+    btnLocalBrush: TButton;
+    btnLocalSave: TButton;
+    Panel7: TPanel;
+    edtRemote: TEdit;
+    btnRemoteBrush: TButton;
+    btnRemoteSave: TButton;
+    MemoRemote: TMemo;
+    Splitter2: TSplitter;
+    Panel8: TPanel;
+    edtModel: TEdit;
+    btnModelBrush: TButton;
+    Button2: TButton;
+    memoModel: TMemo;
+    MemoMerge: TMemo;
+    Splitter3: TSplitter;
+    Splitter4: TSplitter;
+    Panel9: TPanel;
+    edtnew: TEdit;
+    btnNew: TButton;
+    Button3: TButton;
+    memoNew: TMemo;
     procedure btnLoadClick(Sender: TObject);
-    procedure Web1DocumentComplete(ASender: TObject; const pDisp: IDispatch;
+    procedure WebRemoteDocumentComplete(ASender: TObject; const pDisp: IDispatch;
       const URL: OleVariant);
-    procedure Web1NavigateComplete2(ASender: TObject; const pDisp: IDispatch;
+    procedure WebRemoteNavigateComplete2(ASender: TObject; const pDisp: IDispatch;
       const URL: OleVariant);
-    procedure Web2DocumentComplete(ASender: TObject; const pDisp: IDispatch;
+    procedure WebModelDocumentComplete(ASender: TObject; const pDisp: IDispatch;
       const URL: OleVariant);
     procedure btnCopyContentClick(Sender: TObject);
     procedure btnMergeClick(Sender: TObject);
     procedure btnMerge2Click(Sender: TObject);
     procedure btnSaveasClick(Sender: TObject);
-    procedure Web3DocumentComplete(ASender: TObject; const pDisp: IDispatch;
+    procedure WebMergeDocumentComplete(ASender: TObject; const pDisp: IDispatch;
       const URL: OleVariant);
-    procedure btnSaveClick(Sender: TObject);
-    procedure web4DocumentComplete(ASender: TObject; const pDisp: IDispatch;
+    procedure webNewDocumentComplete(ASender: TObject; const pDisp: IDispatch;
       const URL: OleVariant);
     procedure FormShow(Sender: TObject);
     procedure FormCreate(Sender: TObject);
-    procedure Web1BeforeNavigate2(ASender: TObject; const pDisp: IDispatch;
+    procedure WebRemoteBeforeNavigate2(ASender: TObject; const pDisp: IDispatch;
       const URL, Flags, TargetFrameName, PostData, Headers: OleVariant;
       var Cancel: WordBool);
     procedure btnCloseClick(Sender: TObject);
     procedure edtFileChange(Sender: TObject);
-    procedure WebListDocumentComplete(ASender: TObject; const pDisp: IDispatch;
+    procedure WebLocalDocumentComplete(ASender: TObject; const pDisp: IDispatch;
       const URL: OleVariant);
-    procedure WebListNavigateComplete2(ASender: TObject; const pDisp: IDispatch;
+    procedure WebLocalNavigateComplete2(ASender: TObject; const pDisp: IDispatch;
       const URL: OleVariant);
     procedure FTP1AfterClientLogin(Sender: TObject);
     procedure FTP1Connected(Sender: TObject);
@@ -133,6 +149,14 @@ type
     procedure PopDownFileClick(Sender: TObject);
     procedure btnCancelClick(Sender: TObject);
     procedure N3Click(Sender: TObject);
+    procedure websiteDocumentComplete(ASender: TObject;
+      const pDisp: IDispatch; const URL: OleVariant);
+    procedure websiteNavigateComplete2(ASender: TObject;
+      const pDisp: IDispatch; const URL: OleVariant);
+    procedure btnLocalSaveClick(Sender: TObject);
+    procedure btnLocalBrushClick(Sender: TObject);
+    procedure btnRemoteBrushClick(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
   private
     { Private declarations }
     mLocalHomeDir:string;
@@ -159,7 +183,7 @@ var
 function getPageCode(doc:IHTMLDocument2):string;//返回页面源代码
 function getPageContent(doc:IHTMLDocument2;tag:string):string;//返回页面源代码
 function DownloadToFile(Source, Dest: string): Boolean;
-procedure SaveAsPage(doc:IHTMLDocument2;localPageName:string);//页面另存为
+function SaveAsPage(doc:IHTMLDocument2;localPageName:string):string;//页面另存为
 procedure SaveSinglePage(doc:IHTMLDocument2;localPageName:string);//仅仅保存一个页面
 procedure  WB_LoadHTML(WebBrowser:  TWebBrowser;  HTMLCode:  string);//将 HTML 代码直接加入到 TWebbrowser 组件中去
 procedure  WBLoadHTML(WebBrowser:  TWebBrowser;  HTMLCode:  tstrings);
@@ -416,11 +440,9 @@ var
   filename,dir,Localfile:string;
 begin
   if not ftpConnected() then exit;
-  item:=listftpfile.Selected;
-  if item.ImageIndex<>8 then exit;
   filename:=edtfile.Text;
   if(filename='*.*')then exit;
-  localfile:=dir+'\'+filename;
+  localfile:=dir1.Directory+'\'+filename;
 try
   ftp1.Put(LocalFile,filename,true);
   ftpListFile('');
@@ -573,10 +595,10 @@ procedure TfMain.btnCopyContentClick(Sender: TObject);
 var
   doc:IHTMLDocument2;
 begin
-  doc:=web1.Document as IHTMLDocument2; //得到接口；
-  memo3.Lines.Text:=getpagecontent(doc,'article_content');
+  doc:=WebRemote.Document as IHTMLDocument2; //得到接口；
+  memoArticle.Lines.Text:=getpagecontent(doc,'article_content');
   bar1.Panels[0].Text:='加载完毕！';
-  page1.ActivePageIndex:=6;
+  page1.ActivePage:=tsArticle;
 end;
 
 procedure TfMain.btnDisconnectClick(Sender: TObject);
@@ -586,28 +608,41 @@ end;
 
 procedure TfMain.btnLoadClick(Sender: TObject);
 begin
-  page1.ActivePageIndex:=2;
-  web1.Navigate(edturl.Text);
+  page1.ActivePage:=tsRemote;
+  WebRemote.Navigate(edturl.Text);
   bar1.Panels[0].Text:='正在加载页面...';
-  web2.Navigate(mModelPage);
+  WebModel.Navigate(mModelPage);
+  edtRemote.Text:=edturl.Text;
+  edtModel.Text:=mModelPage;
   //web2.Navigate(memo2.Lines.Text);
+end;
+
+procedure TfMain.btnLocalBrushClick(Sender: TObject);
+begin
+  webLocal.Navigate(edtLocalFile.Text);
+end;
+
+procedure TfMain.btnLocalSaveClick(Sender: TObject);
+begin
+  memoLocal.Lines.SaveToFile(edtLocalFile.Text,TEncoding.UTF8);
+  webLocal.Navigate(edtLocalFile.Text);
 end;
 
 procedure TfMain.btnMerge2Click(Sender: TObject);
 var
   title:string;
 begin
-  memo4.Lines:=memo2.Lines;
-  memo4.Lines.Insert(12,memo3.Text);
+  MemoMerge.Lines:=memoModel.Lines;
+  MemoMerge.Lines.Insert(12,memoArticle.Text);
   mTitle:=edtTitle.Text;
   title:='<title>'+mTitle+'</title>';
-  memo4.Lines.Text:=StringReplace(memo4.Lines.Text,'<title></title>',title,[rfReplaceAll]);
+  MemoMerge.Lines.Text:=StringReplace(MemoMerge.Lines.Text,'<title></title>',title,[rfReplaceAll]);
   //mergefilename:=mWorkDir+'\tmp.htm';
   //memo4.Lines.SaveToFile(mergefilename,tEncoding.UTF8);
   bar1.Panels[0].Text:='正在加载合成页面...';
-  page1.ActivePageIndex:=8;
+  page1.ActivePage:=tsMerge;
   //web3.Navigate(mergefilename);
-  wbloadhtml(web3,memo4.Lines);
+  wbloadhtml(WebMerge,MemoMerge.Lines);
 
 end;
 
@@ -615,21 +650,30 @@ procedure TfMain.btnMergeClick(Sender: TObject);
 var
   doc1,doc2:IHTMLDocument2;
 begin
-  doc1:=web1.Document as IHTMLDocument2; //得到接口；
-  memo1.Lines.Text:=getpagecontent(doc1,'article_content');
-  doc2:=web2.Document as IHTMLDocument2; //得到接口；
-  doc2.body.innerHTML:=memo1.Lines.Text;
+  doc1:=WebRemote.Document as IHTMLDocument2; //得到接口；
+  memoRemote.Lines.Text:=getpagecontent(doc1,'article_content');
+  doc2:=WebModel.Document as IHTMLDocument2; //得到接口；
+  doc2.body.innerHTML:=memoRemote.Lines.Text;
   //doc2.body.innerHTML:='aa';
 
   //memo4.Lines.Text:=doc2.all.toString;
-  memo4.Lines.Text:=getpagecode(doc2);
+  memoMerge.Lines.Text:=getpagecode(doc2);
 end;
 
 procedure TfMain.btnParentDirClick(Sender: TObject);
 begin
-  //FTP1.ChangeDir('..');
-  FTP1.ChangeDirUp;
+  if not ftpConnected() then exit;
+try
+  ftp1.ChangeDirUp;
   ftpListFile('');
+finally
+
+end;
+end;
+
+procedure TfMain.btnRemoteBrushClick(Sender: TObject);
+begin
+  webRemote.Navigate(edtRemote.Text);
 end;
 
 procedure TfMain.btnSaveasClick(Sender: TObject);
@@ -638,7 +682,7 @@ const
 var
   filename,fileList,lastLine,lastnum,newnum,newfilename:string; //fileList:list文件名;lastline:最后的li项；lastnum:最大li编号；newnum:新文件编号；newfilename:新文件名；
   doc3:IHTMLDocument2;
-  ss:tstrings;
+  ss,imglist:tstrings;
   i:integer;
 begin
   fileList:=uFuncs.findfile(dir1.Directory,'*list.htm');
@@ -648,6 +692,7 @@ begin
     exit;
   end;
   ss:=tstringlist.Create;
+  imglist:=tstringlist.Create;
   ss.LoadFromFile(fileList,TEncoding.UTF8);
   for i := 0 to ss.Count-1 do
   begin
@@ -671,37 +716,50 @@ begin
   save1.FileName:=dir1.Directory+'\'+newfilename;
   //DownloadToFile('https://stackedit.io/style.css','C:\tmp\2\style.css');
 
-  if not Assigned(web3.Document) then Exit;
+  if not Assigned(WebMerge.Document) then Exit;
   if(save1.Execute())then begin
     filename:=save1.FileName;
     save1.InitialDir:=extractfiledir(filename);
-    doc3:=web3.Document as IHTMLDocument2;
-    SaveAsPage(doc3,filename);
-    fmain.memo5.Lines.Text:=fmain.web3.OleObject.Document.all.tags('HTML').Item(0).outerHTML;
-    memo5.Lines.SaveToFile(filename,tEncoding.UTF8);
+    doc3:=WebMerge.Document as IHTMLDocument2;
+    imglist.Text:=SaveAsPage(doc3,filename);
+    fmain.memoNew.Lines.Text:=fmain.WebMerge.OleObject.Document.all.tags('HTML').Item(0).outerHTML;
+    memoNew.Lines.SaveToFile(filename,tEncoding.UTF8);
     page1.ActivePageIndex:=10;
-    web4.Navigate(filename);
+    webNew.Navigate(filename);
     mPage:=filename;
     lastLine:='<li><a href="'+newfilename+'">'+mtitle+'</a></li>';
     ss.Insert(i,lastLine);
     ss.SaveToFile(fileList,tEncoding.UTF8);
+    edtnew.Text:=filename;
+    //上传到站点
     if(ftp1.Connected)then
     begin
       ftp1.Put(filename);
-      ftp1.Delete(fileList);
+      ftp1.Delete(extractfilename(fileList));
       ftp1.Put(fileList);
+      if imglist.Count>0 then
+      begin
+        ftp1.ChangeDir('images');
+        for I := 0 to imglist.Count-1 do
+        begin
+          ftp1.Put(imglist[i]);
+        end;
+        ftp1.ChangeDirUp;
+      end;
+      ftpListfile('');
+      file1.Update;
     end;
   end;
   if assigned(ss) then ss.Free;
 
 end;
 
-procedure TfMain.btnSaveClick(Sender: TObject);
+procedure TfMain.Button3Click(Sender: TObject);
 begin
-  page1.ActivePageIndex:=10;
+  page1.ActivePage:=tsNew;
   bar1.Panels[0].Text:='正在加载本地页面...！';
-  memo5.Lines.SaveToFile(mPage,tEncoding.UTF8);
-  web4.Navigate(mPage);
+  memoNew.Lines.SaveToFile(edtNew.Text,tEncoding.UTF8);
+  webNew.Navigate(edtNew.Text);
 end;
 
 procedure TfMain.edtFileChange(Sender: TObject);
@@ -714,7 +772,9 @@ begin
   begin
     filedir:=dir1.Directory;
     fullfilename:=filedir+'\'+filename;
-    webList.Navigate(fullfilename);
+    webLocal.Navigate(fullfilename);
+    edtLocalFile.text:=fullfilename;
+    page1.ActivePage:=tsLocal;
     bar1.Panels[0].Text:='正在加载本地页面...'+fullfilename;
   end;
 end;
@@ -730,10 +790,11 @@ procedure TfMain.FormShow(Sender: TObject);
 begin
   mWorkDir:=uConfig.workdir;
   mModelPage:=uConfig.modelfile;
-  web2.Navigate(mModelPage);
+  WebModel.Navigate(mModelPage);
   fmain.caption:=APP_TITLE+APP_VERSION;
   initLocalDir();
   initHostdir();
+  website.Navigate(uConfig.SITE_HOME);
 end;
 
 procedure TfMain.FTP1AfterClientLogin(Sender: TObject);
@@ -795,21 +856,21 @@ begin
   memoftp.Lines.Add(workmsg);
 end;
 
-procedure TfMain.Web1BeforeNavigate2(ASender: TObject; const pDisp: IDispatch;
+procedure TfMain.WebRemoteBeforeNavigate2(ASender: TObject; const pDisp: IDispatch;
   const URL, Flags, TargetFrameName, PostData, Headers: OleVariant;
   var Cancel: WordBool);
 begin
   bar1.Panels[0].Text:='正在加载页面...';
 end;
 
-procedure TfMain.Web1DocumentComplete(ASender: TObject; const pDisp: IDispatch;
+procedure TfMain.WebRemoteDocumentComplete(ASender: TObject; const pDisp: IDispatch;
   const URL: OleVariant);
 var
   doc:IHTMLDocument2;
 begin
-  if(Web1.ReadyState<>READYSTATE_COMPLETE)then exit;
-  doc:=web1.Document as IHTMLDocument2; //得到接口；
-  memo1.Lines.Text:=getpagecode(doc);
+  if(WebRemote.ReadyState<>READYSTATE_COMPLETE)then exit;
+  doc:=WebRemote.Document as IHTMLDocument2; //得到接口；
+  memoRemote.Lines.Text:=getpagecode(doc);
   mProtocol:=doc.protocol;
   mTitle:=doc.title;
   edtTitle.Text:=mTitle;
@@ -821,58 +882,80 @@ begin
   //page1.ActivePageIndex:=1;
 end;
 
-procedure TfMain.Web1NavigateComplete2(ASender: TObject; const pDisp: IDispatch;
+procedure TfMain.WebRemoteNavigateComplete2(ASender: TObject; const pDisp: IDispatch;
   const URL: OleVariant);
 begin
-  web1.Silent := True;
+  WebRemote.Silent := True;
 end;
 
-procedure TfMain.Web2DocumentComplete(ASender: TObject; const pDisp: IDispatch;
+procedure TfMain.WebModelDocumentComplete(ASender: TObject; const pDisp: IDispatch;
   const URL: OleVariant);
 var
   doc:IHTMLDocument2;
 begin
-  doc:=web2.Document as IHTMLDocument2; //得到接口；
-  memo2.Lines.Text:=getpagecode(doc);
+  doc:=WebModel.Document as IHTMLDocument2; //得到接口；
+  memoModel.Lines.Text:=getpagecode(doc);
   bar1.Panels[0].Text:='模板页面加载完毕！';
 
 end;
-procedure TfMain.Web3DocumentComplete(ASender: TObject; const pDisp: IDispatch;
+procedure TfMain.WebMergeDocumentComplete(ASender: TObject; const pDisp: IDispatch;
   const URL: OleVariant);
 var
   doc:IHTMLDocument2;
 begin
-  doc:=web3.Document as IHTMLDocument2; //得到接口；
+  doc:=WebMerge.Document as IHTMLDocument2; //得到接口；
   doc.title:=mTitle;
-  memo4.Lines.Text:=getpageContent(doc,'html');
+  memoMerge.Lines.Text:=getpageContent(doc,'html');
   bar1.Panels[0].Text:='合成页面加载完毕！';
 end;
 
-procedure TfMain.web4DocumentComplete(ASender: TObject; const pDisp: IDispatch;
+procedure TfMain.webNewDocumentComplete(ASender: TObject; const pDisp: IDispatch;
   const URL: OleVariant);
 begin
    bar1.Panels[0].Text:='本地页面加载完毕！';
 end;
 
-procedure TfMain.WebListDocumentComplete(ASender: TObject;
+procedure TfMain.WebLocalDocumentComplete(ASender: TObject;
   const pDisp: IDispatch; const URL: OleVariant);
 var
   doc:IHTMLDocument2;
 begin
-  doc:=webList.Document as IHTMLDocument2;
-  memoList.Lines.Text:=getpagecode(doc);
+  doc:=webLocal.Document as IHTMLDocument2;
+  memoLocal.Lines.Text:=getpagecode(doc);
   fmain.Caption:=uConfig.APP_TITLE+uConfig.APP_VERSION+'('+doc.title+')';
   bar1.Panels[0].Text:='本地页面加载完毕！';
 end;
 
-procedure TfMain.WebListNavigateComplete2(ASender: TObject;
+procedure TfMain.WebLocalNavigateComplete2(ASender: TObject;
   const pDisp: IDispatch; const URL: OleVariant);
 begin
-  webList.Silent := True;
+  webLocal.Silent := True;
+end;
+
+procedure TfMain.websiteDocumentComplete(ASender: TObject;
+  const pDisp: IDispatch; const URL: OleVariant);
+var
+  doc:IHTMLDocument2;
+begin
+  doc:=website.Document as IHTMLDocument2;
+  bar1.Panels[0].Text:='网站页面加载完毕！';
+
+end;
+
+procedure TfMain.websiteNavigateComplete2(ASender: TObject;
+  const pDisp: IDispatch; const URL: OleVariant);
+begin
+  webSite.Silent := True;
 end;
 
 //------------------------------------------页面另存为区------------------------------------------
-procedure SaveAsPage(doc:IHTMLDocument2;localPageName:string);//页面另存为
+{-------------------------------------------------------------------------------
+过程名:    SaveAsPage 将远程doc页面保存为本地页面，同时修改页面里面的图片链接地址，下载远程图片到本地，返回本地图片地址列表；
+参数:      doc:IHTMLDocument2;localPageName:string  1.远程页面；2.本地文件名；
+返回值:    result:string  返回本地图片列表地址。
+
+-------------------------------------------------------------------------------}
+function SaveAsPage(doc:IHTMLDocument2;localPageName:string):string;//页面另存为
 Var
   all:IHTMLElementCollection;
   sheets:IHTMLstyleSheetsCollection;
@@ -887,6 +970,7 @@ begin
   filetag:=leftstr(localfilename,length(localfilename)-4);
   localImageDir:=localPageDir+'\images';
   if(not System.SysUtils.directoryexists(localImageDir))then System.SysUtils.forcedirectories(localImageDir);
+  ss:=tstringlist.Create;
   all:=doc.images;
   len:=all.length;
   for I:=0 to len-1 do begin
@@ -903,9 +987,12 @@ begin
     filename:=filetag+num+fileext;
     localfilename:=localImageDir+'\'+filename;
     DownloadToFile(url,localfilename);
+    ss.Add(localfilename);
     newUrl:='images/'+filename;
     item.src:=newUrl;
   end;
+  result:=ss.Text;
+  ss.Free;
   //ss:=tstringlist.Create;
   //ss.Text:=doc.body.outerHTML;
   //ss.SaveToFile(localpagename,TEncoding.UTF8);
