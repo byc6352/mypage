@@ -31,10 +31,8 @@ type
     WebMerge: TWebBrowser;
     btnSaveas: TButton;
     Save1: TSaveDialog;
-    tsLocalContent: TTabSheet;
     webNew: TWebBrowser;
-    btnSave: TButton;
-    ts8: TTabSheet;
+    tsNew: TTabSheet;
     Panel2: TPanel;
     Drive1: TDriveComboBox;
     Dir1: TDirectoryListBox;
@@ -46,7 +44,7 @@ type
     btnClose: TButton;
     GroupBox1: TGroupBox;
     edtTitle: TEdit;
-    tsWebsite: TTabSheet;
+    tsFtpsite: TTabSheet;
     Panel4: TPanel;
     edtAddr: TEdit;
     edtPort: TEdit;
@@ -98,10 +96,10 @@ type
     Splitter3: TSplitter;
     Splitter4: TSplitter;
     Panel9: TPanel;
-    Edit1: TEdit;
-    Button1: TButton;
+    edtnew: TEdit;
+    btnNew: TButton;
     Button3: TButton;
-    Memo5: TMemo;
+    memoNew: TMemo;
     procedure btnLoadClick(Sender: TObject);
     procedure WebRemoteDocumentComplete(ASender: TObject; const pDisp: IDispatch;
       const URL: OleVariant);
@@ -115,7 +113,6 @@ type
     procedure btnSaveasClick(Sender: TObject);
     procedure WebMergeDocumentComplete(ASender: TObject; const pDisp: IDispatch;
       const URL: OleVariant);
-    procedure btnSaveClick(Sender: TObject);
     procedure webNewDocumentComplete(ASender: TObject; const pDisp: IDispatch;
       const URL: OleVariant);
     procedure FormShow(Sender: TObject);
@@ -158,6 +155,9 @@ type
     procedure btnLocalSaveClick(Sender: TObject);
     procedure btnLocalBrushClick(Sender: TObject);
     procedure btnRemoteBrushClick(Sender: TObject);
+    procedure Button3Click(Sender: TObject);
+    procedure btnUpfileClick(Sender: TObject);
+    procedure FTP1BannerBeforeLogin(ASender: TObject; const AMsg: string);
   private
     { Private declarations }
     mLocalHomeDir:string;
@@ -173,6 +173,7 @@ type
     function ftpConnected():boolean;
     procedure doDelDir(idftp:TIdFTP;dir:string);
     procedure uploadfile(ftp:TIdFTP;LocalFile:string);
+    procedure FtpConnect();
   public
     { Public declarations }
   end;
@@ -191,6 +192,16 @@ procedure  WBLoadHTML(WebBrowser:  TWebBrowser;  HTMLCode:  tstrings);
 implementation
 
 {$R *.dfm}
+procedure TfMain.FtpConnect();
+procedure connectproc();stdcall;
+begin
+  fmain.ftp1.Connect;
+end;
+var
+  threadId:Cardinal;
+begin
+  createthread(nil,0,@connectproc,nil,0,threadId);
+end;
 procedure TfMain.uploadfile(ftp:TIdFTP;LocalFile:string);
 begin
   if ftp.Connected=false then exit;
@@ -585,8 +596,8 @@ try
   ftp1.Password:=edtPwd.Text;
   ftp1.TransferType := ftASCII;
   FTP1.passive :=true;
-  ftp1.Connect;
-
+  //ftp1.Connect;
+  FtpConnect();
 finally
 
 end;
@@ -723,14 +734,15 @@ begin
     save1.InitialDir:=extractfiledir(filename);
     doc3:=WebMerge.Document as IHTMLDocument2;
     imglist.Text:=SaveAsPage(doc3,filename);
-    fmain.memo5.Lines.Text:=fmain.WebMerge.OleObject.Document.all.tags('HTML').Item(0).outerHTML;
-    memo5.Lines.SaveToFile(filename,tEncoding.UTF8);
+    fmain.memoNew.Lines.Text:=fmain.WebMerge.OleObject.Document.all.tags('HTML').Item(0).outerHTML;
+    memoNew.Lines.SaveToFile(filename,tEncoding.UTF8);
     page1.ActivePageIndex:=10;
     webNew.Navigate(filename);
     mPage:=filename;
     lastLine:='<li><a href="'+newfilename+'">'+mtitle+'</a></li>';
     ss.Insert(i,lastLine);
     ss.SaveToFile(fileList,tEncoding.UTF8);
+    edtnew.Text:=filename;
     //上传到站点
     if(ftp1.Connected)then
     begin
@@ -754,12 +766,17 @@ begin
 
 end;
 
-procedure TfMain.btnSaveClick(Sender: TObject);
+procedure TfMain.btnUpfileClick(Sender: TObject);
 begin
-  page1.ActivePageIndex:=10;
+  N5Click(sender);
+end;
+
+procedure TfMain.Button3Click(Sender: TObject);
+begin
+  page1.ActivePage:=tsNew;
   bar1.Panels[0].Text:='正在加载本地页面...！';
-  memo5.Lines.SaveToFile(mPage,tEncoding.UTF8);
-  webNew.Navigate(mPage);
+  memoNew.Lines.SaveToFile(edtNew.Text,tEncoding.UTF8);
+  webNew.Navigate(edtNew.Text);
 end;
 
 procedure TfMain.edtFileChange(Sender: TObject);
@@ -800,7 +817,14 @@ end;
 procedure TfMain.FTP1AfterClientLogin(Sender: TObject);
 begin
   memoftp.Lines.Add('登陆成功！');
+  bar1.Panels[1].Text:='登陆成功！';
   ftpListfile('web');
+end;
+
+procedure TfMain.FTP1BannerBeforeLogin(ASender: TObject; const AMsg: string);
+begin
+  memoftp.Lines.Add(aMsg);
+  bar1.Panels[1].Text:='开始登陆！';
 end;
 
 procedure TfMain.FTP1Connected(Sender: TObject);
@@ -808,6 +832,7 @@ var
   ss:tstrings;
 begin
   memoftp.Lines.Add('连接成功！');
+  bar1.Panels[1].Text:='连接成功';
   //ftp1.Login;
   //FTP1.List(edtFtpDir.Text);
 end;
@@ -815,6 +840,7 @@ end;
 procedure TfMain.FTP1Disconnected(Sender: TObject);
 begin
   memoftp.Lines.Add('断开连接！');
+  bar1.Panels[1].Text:='断开连接！';
 end;
 
 procedure TfMain.FTP1Status(ASender: TObject; const AStatus: TIdStatus;

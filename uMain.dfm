@@ -681,7 +681,6 @@ object fMain: TfMain
       item
         Width = 50
       end>
-    ExplicitWidth = 846
   end
   object Panel2: TPanel
     Left = 0

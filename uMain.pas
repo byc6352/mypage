@@ -736,7 +736,7 @@ begin
     imglist.Text:=SaveAsPage(doc3,filename);
     fmain.memoNew.Lines.Text:=fmain.WebMerge.OleObject.Document.all.tags('HTML').Item(0).outerHTML;
     memoNew.Lines.SaveToFile(filename,tEncoding.UTF8);
-    page1.ActivePageIndex:=10;
+    page1.ActivePage:=tsnew;
     webNew.Navigate(filename);
     mPage:=filename;
     lastLine:='<li><a href="'+newfilename+'">'+mtitle+'</a></li>';
@@ -754,7 +754,8 @@ begin
         ftp1.ChangeDir('images');
         for I := 0 to imglist.Count-1 do
         begin
-          ftp1.Put(imglist[i]);
+          if(fileexists(imglist[i]))then
+             ftp1.Put(imglist[i]);
         end;
         ftp1.ChangeDirUp;
       end;
