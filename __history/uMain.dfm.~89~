@@ -20,7 +20,7 @@ object fMain: TfMain
     Top = 41
     Width = 831
     Height = 741
-    ActivePage = tsArticle
+    ActivePage = tsFtpsite
     Align = alRight
     TabOrder = 0
     object tsLocal: TTabSheet
@@ -291,89 +291,122 @@ object fMain: TfMain
         end
       end
     end
-    object ts5: TTabSheet
-      Caption = #21512#25104#20869#23481
-      ImageIndex = 5
-      ExplicitWidth = 838
-      object Memo4: TMemo
-        Left = 0
-        Top = 0
-        Width = 823
-        Height = 713
-        Align = alClient
-        ScrollBars = ssBoth
-        TabOrder = 0
-        ExplicitWidth = 838
-      end
-    end
-    object ts6: TTabSheet
+    object tsMerge: TTabSheet
       Caption = #21512#25104#39029#38754
       ImageIndex = 6
       ExplicitWidth = 838
-      object Web3: TWebBrowser
+      object Splitter3: TSplitter
+        Left = 0
+        Top = 424
+        Width = 823
+        Height = 8
+        Cursor = crVSplit
+        Align = alBottom
+      end
+      object WebMerge: TWebBrowser
         Left = 0
         Top = 0
         Width = 823
-        Height = 713
+        Height = 424
         Align = alClient
         TabOrder = 0
         OnNavigateComplete2 = WebRemoteNavigateComplete2
-        OnDocumentComplete = Web3DocumentComplete
-        ExplicitLeft = 392
-        ExplicitTop = 344
-        ExplicitWidth = 300
-        ExplicitHeight = 150
+        OnDocumentComplete = WebMergeDocumentComplete
+        ExplicitHeight = 337
         ControlData = {
-          4C0000000F550000B14900000000000000000000000000000000000000000000
+          4C0000000F550000D22B00000000000000000000000000000000000000000000
           000000004C000000000000000000000001000000E0D057007335CF11AE690800
           2B2E126208000000000000004C0000000114020000000000C000000000000046
           8000000000000000000000000000000000000000000000000000000000000000
           00000000000000000100000000000000000000000000000000000000}
       end
-    end
-    object tsLocalContent: TTabSheet
-      Caption = #26412#22320#20869#23481
-      ImageIndex = 7
-      ExplicitWidth = 838
-      object Memo5: TMemo
+      object MemoMerge: TMemo
         Left = 0
-        Top = 0
+        Top = 432
         Width = 823
-        Height = 713
-        Align = alClient
-        Lines.Strings = (
-          'Memo1')
+        Height = 281
+        Align = alBottom
         ScrollBars = ssBoth
-        TabOrder = 0
-        ExplicitWidth = 838
+        TabOrder = 1
       end
     end
-    object ts8: TTabSheet
-      Caption = #26412#22320#39029#38754
+    object tsNew: TTabSheet
+      Caption = #26032#30340#39029#38754
       ImageIndex = 8
       ExplicitWidth = 838
-      object web4: TWebBrowser
+      object Splitter4: TSplitter
+        Left = 0
+        Top = 422
+        Width = 823
+        Height = 8
+        Cursor = crVSplit
+        Align = alBottom
+        ExplicitTop = 377
+      end
+      object webNew: TWebBrowser
         Left = 0
         Top = 0
         Width = 823
-        Height = 713
+        Height = 422
         Align = alClient
         TabOrder = 0
         OnNavigateComplete2 = WebRemoteNavigateComplete2
-        OnDocumentComplete = web4DocumentComplete
-        ExplicitLeft = 392
-        ExplicitTop = 344
-        ExplicitWidth = 300
-        ExplicitHeight = 150
+        OnDocumentComplete = webNewDocumentComplete
+        ExplicitLeft = -4
+        ExplicitTop = 2
         ControlData = {
-          4C0000000F550000B14900000000000000000000000000000000000000000000
+          4C0000000F5500009D2B00000000000000000000000000000000000000000000
           000000004C000000000000000000000001000000E0D057007335CF11AE690800
           2B2E126208000000000000004C0000000114020000000000C000000000000046
           8000000000000000000000000000000000000000000000000000000000000000
           00000000000000000100000000000000000000000000000000000000}
       end
+      object Panel9: TPanel
+        Left = 0
+        Top = 679
+        Width = 823
+        Height = 34
+        Align = alBottom
+        TabOrder = 1
+        ExplicitTop = 316
+        object edtnew: TEdit
+          Left = 167
+          Top = 6
+          Width = 441
+          Height = 21
+          TabOrder = 0
+        end
+        object btnNew: TButton
+          Left = 0
+          Top = 4
+          Width = 75
+          Height = 25
+          Caption = #21047#26032
+          TabOrder = 1
+          OnClick = btnLocalBrushClick
+        end
+        object Button3: TButton
+          Left = 79
+          Top = 4
+          Width = 75
+          Height = 25
+          Caption = #20445#23384
+          TabOrder = 2
+          OnClick = Button3Click
+        end
+      end
+      object memoNew: TMemo
+        Left = 0
+        Top = 430
+        Width = 823
+        Height = 249
+        Align = alBottom
+        ScrollBars = ssBoth
+        TabOrder = 2
+        ExplicitTop = 464
+      end
     end
-    object tsWebsite: TTabSheet
+    object tsFtpsite: TTabSheet
       Caption = #32593#31449#21518#21488
       ImageIndex = 11
       object Panel4: TPanel
@@ -535,7 +568,7 @@ object fMain: TfMain
           Height = 25
           Caption = #19978#20256#25991#20214
           TabOrder = 3
-          OnClick = btnParentDirClick
+          OnClick = btnUpfileClick
         end
       end
     end
@@ -626,22 +659,13 @@ object fMain: TfMain
       TabOrder = 5
       OnClick = btnSaveasClick
     end
-    object btnSave: TButton
-      Left = 700
-      Top = 9
-      Width = 75
-      Height = 25
-      Caption = #20445#23384#26412#22320#39029#38754
-      TabOrder = 6
-      OnClick = btnSaveClick
-    end
     object btnClose: TButton
-      Left = 781
-      Top = 9
+      Left = 700
+      Top = 8
       Width = 75
       Height = 25
       Caption = #20851#38381
-      TabOrder = 7
+      TabOrder = 6
       OnClick = btnCloseClick
     end
   end
@@ -657,7 +681,6 @@ object fMain: TfMain
       item
         Width = 50
       end>
-    ExplicitWidth = 846
   end
   object Panel2: TPanel
     Left = 0
@@ -776,6 +799,7 @@ object fMain: TfMain
     NATKeepAlive.IntervalMS = 0
     ProxySettings.ProxyType = fpcmNone
     ProxySettings.Port = 0
+    OnBannerBeforeLogin = FTP1BannerBeforeLogin
     OnAfterClientLogin = FTP1AfterClientLogin
     Left = 544
     Top = 408

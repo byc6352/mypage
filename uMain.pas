@@ -950,6 +950,7 @@ begin
   doc:=webLocal.Document as IHTMLDocument2;
   memoLocal.Lines.Text:=getpagecode(doc);
   fmain.Caption:=uConfig.APP_TITLE+uConfig.APP_VERSION+'('+doc.title+')';
+  edturl.Text:=doc.url;
   bar1.Panels[0].Text:='本地页面加载完毕！';
 end;
 

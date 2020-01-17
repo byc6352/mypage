@@ -16,34 +16,39 @@ object fMain: TfMain
   PixelsPerInch = 96
   TextHeight = 13
   object Page1: TPageControl
-    Left = 262
+    Left = 256
     Top = 41
-    Width = 831
+    Width = 837
     Height = 741
-    ActivePage = tsFtpsite
-    Align = alRight
+    ActivePage = tsLocal
+    Align = alClient
     TabOrder = 0
+    ExplicitLeft = 262
+    ExplicitWidth = 831
     object tsLocal: TTabSheet
       Caption = #26412#22320#39029#38754
       ImageIndex = 9
+      ExplicitWidth = 823
       object Splitter1: TSplitter
         Left = 0
         Top = 379
-        Width = 823
+        Width = 829
         Height = 3
         Cursor = crVSplit
         Align = alBottom
         ExplicitLeft = -5
+        ExplicitWidth = 823
       end
       object WebLocal: TWebBrowser
         Left = 0
         Top = 0
-        Width = 823
+        Width = 829
         Height = 379
         Align = alClient
         TabOrder = 0
         OnNavigateComplete2 = WebLocalNavigateComplete2
         OnDocumentComplete = WebLocalDocumentComplete
+        ExplicitWidth = 823
         ExplicitHeight = 313
         ControlData = {
           4C0000000F550000B14900000000000000000000000000000000000000000000
@@ -55,11 +60,12 @@ object fMain: TfMain
       object Panel6: TPanel
         Left = 0
         Top = 679
-        Width = 823
+        Width = 829
         Height = 34
         Align = alBottom
         TabOrder = 1
         ExplicitTop = 316
+        ExplicitWidth = 823
         object edtLocalFile: TEdit
           Left = 167
           Top = 6
@@ -89,7 +95,7 @@ object fMain: TfMain
       object memoLocal: TMemo
         Left = 0
         Top = 382
-        Width = 823
+        Width = 829
         Height = 297
         Align = alBottom
         ScrollBars = ssBoth
@@ -105,24 +111,26 @@ object fMain: TfMain
       object Splitter2: TSplitter
         Left = 0
         Top = 448
-        Width = 823
+        Width = 829
         Height = 8
         Cursor = crVSplit
         Align = alBottom
+        ExplicitWidth = 823
       end
       object WebRemote: TWebBrowser
         Left = 0
         Top = 0
-        Width = 823
+        Width = 829
         Height = 448
         Align = alClient
         TabOrder = 0
         OnBeforeNavigate2 = WebRemoteBeforeNavigate2
         OnNavigateComplete2 = WebRemoteNavigateComplete2
         OnDocumentComplete = WebRemoteDocumentComplete
+        ExplicitWidth = 823
         ExplicitHeight = 337
         ControlData = {
-          4C0000000F5500004D2E00000000000000000000000000000000000000000000
+          4C000000AE5500004D2E00000000000000000000000000000000000000000000
           000000004C000000000000000000000001000000E0D057007335CF11AE690800
           2B2E126208000000000000004C0000000114020000000000C000000000000046
           8000000000000000000000000000000000000000000000000000000000000000
@@ -131,11 +139,12 @@ object fMain: TfMain
       object Panel7: TPanel
         Left = 0
         Top = 679
-        Width = 823
+        Width = 829
         Height = 34
         Align = alBottom
         TabOrder = 1
         ExplicitTop = 316
+        ExplicitWidth = 823
         object edtRemote: TEdit
           Left = 167
           Top = 6
@@ -164,11 +173,12 @@ object fMain: TfMain
       object MemoRemote: TMemo
         Left = 0
         Top = 456
-        Width = 823
+        Width = 829
         Height = 223
         Align = alBottom
         ScrollBars = ssBoth
         TabOrder = 2
+        ExplicitWidth = 823
       end
     end
     object ts1: TTabSheet
@@ -178,13 +188,14 @@ object fMain: TfMain
       object WebModel: TWebBrowser
         Left = 0
         Top = 0
-        Width = 823
+        Width = 829
         Height = 417
         Align = alTop
         TabOrder = 0
         OnDocumentComplete = WebModelDocumentComplete
+        ExplicitWidth = 823
         ControlData = {
-          4C0000000F550000192B00000000000000000000000000000000000000000000
+          4C000000AE550000192B00000000000000000000000000000000000000000000
           000000004C000000000000000000000001000000E0D057007335CF11AE690800
           2B2E126208000000000000004C0000000114020000000000C000000000000046
           8000000000000000000000000000000000000000000000000000000000000000
@@ -193,11 +204,12 @@ object fMain: TfMain
       object Panel8: TPanel
         Left = 0
         Top = 679
-        Width = 823
+        Width = 829
         Height = 34
         Align = alBottom
         TabOrder = 1
         ExplicitTop = 316
+        ExplicitWidth = 823
         object edtModel: TEdit
           Left = 167
           Top = 6
@@ -226,7 +238,7 @@ object fMain: TfMain
       object memoModel: TMemo
         Left = 0
         Top = 417
-        Width = 823
+        Width = 829
         Height = 262
         Align = alBottom
         Lines.Strings = (
@@ -262,26 +274,28 @@ object fMain: TfMain
       object memoArticle: TMemo
         Left = 0
         Top = 41
-        Width = 823
+        Width = 829
         Height = 672
         Align = alClient
         ScrollBars = ssBoth
         TabOrder = 0
         ExplicitTop = 64
+        ExplicitWidth = 823
         ExplicitHeight = 649
       end
       object GroupBox1: TGroupBox
         Left = 0
         Top = 0
-        Width = 823
+        Width = 829
         Height = 41
         Align = alTop
         Caption = #25991#31456#26631#39064
         TabOrder = 1
+        ExplicitWidth = 823
         object edtTitle: TEdit
           Left = 2
           Top = 15
-          Width = 819
+          Width = 825
           Height = 21
           Align = alTop
           TabOrder = 0
@@ -298,23 +312,25 @@ object fMain: TfMain
       object Splitter3: TSplitter
         Left = 0
         Top = 424
-        Width = 823
+        Width = 829
         Height = 8
         Cursor = crVSplit
         Align = alBottom
+        ExplicitWidth = 823
       end
       object WebMerge: TWebBrowser
         Left = 0
         Top = 0
-        Width = 823
+        Width = 829
         Height = 424
         Align = alClient
         TabOrder = 0
         OnNavigateComplete2 = WebRemoteNavigateComplete2
         OnDocumentComplete = WebMergeDocumentComplete
+        ExplicitWidth = 823
         ExplicitHeight = 337
         ControlData = {
-          4C0000000F550000D22B00000000000000000000000000000000000000000000
+          4C000000AE550000D22B00000000000000000000000000000000000000000000
           000000004C000000000000000000000001000000E0D057007335CF11AE690800
           2B2E126208000000000000004C0000000114020000000000C000000000000046
           8000000000000000000000000000000000000000000000000000000000000000
@@ -323,11 +339,12 @@ object fMain: TfMain
       object MemoMerge: TMemo
         Left = 0
         Top = 432
-        Width = 823
+        Width = 829
         Height = 281
         Align = alBottom
         ScrollBars = ssBoth
         TabOrder = 1
+        ExplicitWidth = 823
       end
     end
     object tsNew: TTabSheet
@@ -337,16 +354,17 @@ object fMain: TfMain
       object Splitter4: TSplitter
         Left = 0
         Top = 422
-        Width = 823
+        Width = 829
         Height = 8
         Cursor = crVSplit
         Align = alBottom
         ExplicitTop = 377
+        ExplicitWidth = 823
       end
       object webNew: TWebBrowser
         Left = 0
         Top = 0
-        Width = 823
+        Width = 829
         Height = 422
         Align = alClient
         TabOrder = 0
@@ -354,8 +372,9 @@ object fMain: TfMain
         OnDocumentComplete = webNewDocumentComplete
         ExplicitLeft = -4
         ExplicitTop = 2
+        ExplicitWidth = 823
         ControlData = {
-          4C0000000F5500009D2B00000000000000000000000000000000000000000000
+          4C000000AE5500009D2B00000000000000000000000000000000000000000000
           000000004C000000000000000000000001000000E0D057007335CF11AE690800
           2B2E126208000000000000004C0000000114020000000000C000000000000046
           8000000000000000000000000000000000000000000000000000000000000000
@@ -364,11 +383,12 @@ object fMain: TfMain
       object Panel9: TPanel
         Left = 0
         Top = 679
-        Width = 823
+        Width = 829
         Height = 34
         Align = alBottom
         TabOrder = 1
         ExplicitTop = 316
+        ExplicitWidth = 823
         object edtnew: TEdit
           Left = 167
           Top = 6
@@ -398,24 +418,27 @@ object fMain: TfMain
       object memoNew: TMemo
         Left = 0
         Top = 430
-        Width = 823
+        Width = 829
         Height = 249
         Align = alBottom
         ScrollBars = ssBoth
         TabOrder = 2
         ExplicitTop = 464
+        ExplicitWidth = 823
       end
     end
     object tsFtpsite: TTabSheet
       Caption = #32593#31449#21518#21488
       ImageIndex = 11
+      ExplicitWidth = 823
       object Panel4: TPanel
         Left = 0
         Top = 0
-        Width = 823
+        Width = 829
         Height = 30
         Align = alTop
         TabOrder = 0
+        ExplicitWidth = 823
         object Label2: TLabel
           Left = 235
           Top = 8
@@ -496,7 +519,7 @@ object fMain: TfMain
       object ListFtpFile: TListView
         Left = 0
         Top = 59
-        Width = 823
+        Width = 829
         Height = 356
         Align = alClient
         Columns = <
@@ -519,23 +542,26 @@ object fMain: TfMain
         ViewStyle = vsReport
         OnDblClick = ListFtpFileDblClick
         ExplicitLeft = -4
+        ExplicitWidth = 823
       end
       object memoftp: TMemo
         Left = 0
         Top = 415
-        Width = 823
+        Width = 829
         Height = 298
         Align = alBottom
         ScrollBars = ssBoth
         TabOrder = 2
+        ExplicitWidth = 823
       end
       object Panel5: TPanel
         Left = 0
         Top = 30
-        Width = 823
+        Width = 829
         Height = 29
         Align = alTop
         TabOrder = 3
+        ExplicitWidth = 823
         object edtFtpDir: TEdit
           Left = 83
           Top = 2
@@ -575,10 +601,11 @@ object fMain: TfMain
     object tssite: TTabSheet
       Caption = #32593#31449#21069#21488
       ImageIndex = 12
+      ExplicitWidth = 823
       object website: TWebBrowser
         Left = 0
         Top = 0
-        Width = 823
+        Width = 829
         Height = 713
         Align = alClient
         TabOrder = 0
